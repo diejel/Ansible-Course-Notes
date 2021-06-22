@@ -57,7 +57,53 @@ remote_user = tux
 [privilege_escalation]
 become = true; or set in play when needed
 become_method = sudo
+########################
+#Ansible Inventory
+This is a list of hosts,groups and variables that normally or
+by default is in /etc/ansible/hosts.
 
+Example of an inventory file
+----------------------------
+
+192.168.56.2 ansible_connection=local
+
+[webservers]
+192.168.56.[2:4]
+
+[ubuntu]
+192.168.56.4
+
+[centos]
+192.168.56.[2:3]
+
+[uk:children]
+centos
+ubuntu
+
+#####################
+
+Query INventory
+---------------
+This is the way how you make request to query
+for listing hosts in your inventory file
+
+* If you ommit -i , you will look up in the inventory
+file configured
+
+$ ansible -i hosts --lists-hosts ubuntu
+
+$ ansible -i hosts --list-hosts webservers
+
+Separate HOsts and Varibales
+----------------------------
+Is a better practice to separate hosts and groups in differnet
+folders for example "host_vars, group_vars" groups.
+
+$ mkdir ./host_vars
+$ echo "ansible_connection: local" > host_vars/192.168.56.2
+
+
+###################
 Ad-hoc commands
 ----------------
 -m -> to reference the ansible module
