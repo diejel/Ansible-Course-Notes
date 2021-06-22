@@ -65,3 +65,37 @@ Ad-hoc commands
 -i -> to reference a different inventory
 -k -> to prompt for ssh password
 
+* Basic Configuration
+----------------------
+From inventory hosts we will perform a simple script for
+scan the publick ssh key cached  and add it to known_hosts file and
+be accepted when we try to establish a secure communication
+
+$ for h in 192.168.56.{2..4}; do ssh-keyscan $h >> ~/.ssh/known_hosts ; done
+
+$ ssh-keygen (for generation)
+
+*  Ping Hosts
+---------------
+This is not related to ICMP protocol, it is called like that but really
+this is a module that look for a python interpreter active in the remote hosts
+(-k , to prompt ssh password; -K to prompt for SUDO password)
+
+$ ansible all -k -K -m ping 
+
+* Distribute SSH Key
+------------------
+Distribution of the ssh key in all nodes where is created the same user tux
+, add the ssh key in authorized_keys file
+ 
+$ ansible all -k -m authorized_key \
+-a " user='tux' state='present' \ 
+key='{{ lookup{'file','/home/tux/.ssh/id_rsa.pub'} }}'  "
+
+Copy Sudoers Files
+---------------------
+To allow passwordless for not being asked everytime for sudo rights
+
+$ echo " tux ALL=(root) NOPASSWD:ALL" > tux
+ 
+
