@@ -57,3 +57,11 @@ remote_user = tux
 [privilege_escalation]
 become = true; or set in play when needed
 become_method = sudo
+
+Ad-hoc commands
+----------------
+-m -> to reference the ansible module
+-a -> to reference optional arguments to module
+-i -> to reference a different inventory
+-k -> to prompt for ssh password
+
