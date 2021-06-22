@@ -98,4 +98,32 @@ To allow passwordless for not being asked everytime for sudo rights
 
 $ echo " tux ALL=(root) NOPASSWD:ALL" > tux
  
+To verify if syntax is correct, do:
+
+$ sudo visudo -cf tux
+
+Copy process for all inventory hosts using -b to become sudo and elevate
+prvileges using -K, using copy module (-m) and specify the -a argument "..."...
+
+$ ansible all -b -K -m copy -a "src=tux dest=/etc/sudoers.d/tux"
+
+Help on Modules
+----------------
+list module with ansible-doc -l command.
+
+ansible-doc -l
+ansible-doc -l | grep ping
+ansible-doc user
+
+Creating Users
+-----------------
+With user module ,is nedded to specify at least 01 user name as argument.
+Must be run as root including the -b option (to become user = root)
+You can delete the user with : state=absent
+
+$ ansible  192.168.56.2 -b -m user -a "name=fred"
+
+To delete a user:
+$ ansible 192.168.56.2 -b -m user -a "name=fred state=absent"
+$ ansible 192.168.56.2 -b -m user -a "name=fred state=absent remove=true"
 
