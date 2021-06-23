@@ -217,6 +217,10 @@ Finally `-a` is used for specify the other attributes enclosed by `""`.
 
 If you try to run the previous command without -K ( sudo privilege ), will work too because we have already create the tux user file in sudoers.d directory
 
+### Listing Ansible Documentation Modules  ###
+`$ ansible-doc -l`
+`$ ansible-doc user` -> For viewing about user module documentation
+I you want to view 'Examples', just type `\EXAMPLE`, and inside the response it will redirect the Example section. 
 
 
 
