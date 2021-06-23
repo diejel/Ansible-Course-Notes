@@ -200,3 +200,22 @@ to distribute your ssh key to the authorized_key file.
 
 $ ansible all -k -K -m authorized_key -a " user='tux' state='present' key='{{ lookup('file','/home/tux/.ssh/id_rsa_ansible.pub')  }}'   "
 
+## Create the user file for be added to sudoers.d folder in our managed hosts
+`$ echo " tux ALL=(root) NOPASSWD: ALL  > tux"`
+
+### You can verify the syntax with :
+`sudo visudo -cf tux`
+
+### Now, transfer this file to your managed nodes 
+`$ ansible all -b -K -m copy -a " src='tux' dest='/etc/sudoers.d/tux'  "`
+
+In this case, `all` means will be trasferred to all host in our inventory.
+`-b` is used because will 'become' sudo, due to `-K` specified.
+There is no needed anymore `-k` because we have already trasnferred our ssh public key to `authorized_keys` and prompt ssh password is not nedded.
+`-m` is used to specify the `copy` module.
+Finally `-a` is used for specify the other attributes enclosed by `""`.
+
+
+
+
+ 
