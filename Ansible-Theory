@@ -134,9 +134,9 @@ $ ansible all -k -K -m ping
 Distribution of the ssh key in all nodes where is created the same user tux
 , add the ssh key in authorized_keys file
  
-$ ansible all -k -m authorized_key \
+$ ansible all -k -K -m authorized_key \
 -a " user='tux' state='present' \ 
-key='{{ lookup{'file','/home/tux/.ssh/id_rsa.pub'} }}'  "
+key='{{ lookup('file','/home/tux/.ssh/id_rsa.pub') }}'  "
 
 Copy Sudoers Files
 ---------------------
@@ -214,6 +214,9 @@ In this case, `all` means will be trasferred to all host in our inventory.
 There is no needed anymore `-k` because we have already trasnferred our ssh public key to `authorized_keys` and prompt ssh password is not nedded.
 `-m` is used to specify the `copy` module.
 Finally `-a` is used for specify the other attributes enclosed by `""`.
+
+If you try to run the previous command without -K ( sudo privilege ), will work too because we have already create the tux user file in sudoers.d directory
+
 
 
 
