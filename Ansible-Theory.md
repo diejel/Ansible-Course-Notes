@@ -223,6 +223,57 @@ If you try to run the previous command without -K ( sudo privilege ), will work 
 I you want to view 'Examples', just type `\EXAMPLE`, and inside the response it will redirect the Example section. 
 
 ### Playbooks ###
+ - Single tab != single white-space
+ - You can make vim as a valid yaml editor (~/.vimrc)
+ 
+#### Comapring Tab to Spaces
+- 8 spaces = 1 tab (With standard tab setting)
+- `:set list` , helps to view that 
+    - 8 spaces in vim
+    - `^I` 1 tab in vim with standard tab setting
+
+### Sample of vimrc file
+- For yaml file we set 
+  * Auto indent
+  * Expand Tabs to spaces
+  * Tab Stop to 02 spaces
+  * Shift Width to 02 spaces using auto-indent
+  * Column Highlighting ad underlying.
+
+- First line of the vimrc file
+    `autocmd FileType yaml setlocal ai et ts=2 sw=2 cuc cul`
+- Setting the vimrc file
+    ```set bg=dark
+       autocmd Filetype yaml setlocal ai et ts=2 sw=2 cuc cul
+     ```
+### Sample of PLaybook ####
+- Contains a list of plays 
+- A play contians -> list of tasks
+- A task contains -> Ansible module with keys and values
+O playbook must be located in the same folder of inventory.
+```
+---
+
+- name: Play 1
+  hosts: all
+  tasks:
+     - name: task 1
+       debug:
+         msg: "here we are"
+
+```
+- Optionally you can check the syntax by doing : ` $ ansible-playbook sample.yml --syntax-check `
+- Just execute: ` $ ansible-playbook sample.yml`
+
+### Using variables in Playbooks ###
+
+
+
+
+
+
+
+
 
 
 
