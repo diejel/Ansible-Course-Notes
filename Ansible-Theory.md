@@ -222,6 +222,9 @@ If you try to run the previous command without -K ( sudo privilege ), will work 
 `$ ansible-doc user` -> For viewing about user module documentation
 I you want to view 'Examples', just type `\EXAMPLE`, and inside the response it will redirect the Example section. 
 
+### Playbooks ###
+
+
 
 
 
