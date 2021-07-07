@@ -372,5 +372,6 @@ To create by using ad-hoc commands:
 
 And is executed as follows:
 `$ ansible-playbook create_user_jodi.yml `
+
 If you prefer check syntax previously, you can type: 
 `$ ansible-playbook create_user_jodi.yml --syntax-check `
