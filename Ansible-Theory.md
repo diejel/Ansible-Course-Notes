@@ -280,10 +280,17 @@ O playbook must be located in the same folder of inventory.
 ```
 
 
+## Playbook Summary ##
 
-
-
-
+- Edit the vimrc file
+   `autocmd FileType yaml setlocal ai et ts=2 sw=2 cuc cul`
+- name of Playbook, and name of task are optional, but is extremely recommended for tshoot
+- Every .yml file starts with 03 dash lines
+- hosts field must be as follows (IP, group name)
+      `hosts: 192.168.1.50`
+      `hosts: group-centos`
+- Remember disable gather_facts in your ansible script.
+        `gather_facts: false`
 
 
 
