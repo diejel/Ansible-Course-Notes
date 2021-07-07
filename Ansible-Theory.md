@@ -1,22 +1,35 @@
 ### Ansible-Installation ###
 Centos:
+
 `sudo yum install  epel-release`
+
 `sudo yum install ansible`
+
 `ansible --version`
 
 Debian:
+
 `echo "deb http://ppa.launchpad.net/ansible/ansible/ubuntu trusty main" | sudo tee -a /etc/apt/sources.list`
+
 `sudo apt install -y dirmngr`
+
 `sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 93C4A3FD7BB9C367`
+
 `sudo apt update`
+
 `sudo apt install -y ansible sshpass` 
 
 ### Configuration Hierarchy ###
 Environmental Variable: `ANSIBLE_CONFIG`
+
 ansible.cfg  in Working Directory
+
 `$HOME/.ansible.cfg`
+
 `/etc/ansible/ansible.cfg`
+
 `$ ansible --version` -> Show config file
+
 `echo > ~/.ansible.cfg`
 
 ### Show current file contents ###
@@ -87,8 +100,11 @@ folders for example "`host_vars`, `group_vars`" groups.
 
 ### Ad-hoc commands ###
 `-m` -> to reference the ansible module
+
 `-a` -> to reference optional arguments to module
+
 `-i` -> to reference a different inventory
+
 `-k` -> to prompt for ssh password
 
 ### Basic Configuration ###
@@ -134,7 +150,9 @@ prvileges using `-K`, using copy module `-m` and specify the `-a` argument "..."
 List module with `ansible-doc -l` command.
 
 `$ ansible-doc -l`
+
 `$ ansible-doc -l | grep ping`
+
 `$ ansible-doc user`
 
 ## Creating Users ##
@@ -146,6 +164,7 @@ You can delete the user with : `state=absent`
 
 To delete a user:
 `$ ansible 192.168.56.2 -b -m user -a "name=fred state=absent"`
+
 `$ ansible 192.168.56.2 -b -m user -a "name=fred state=absent remove=true"`
 
 
@@ -184,14 +203,17 @@ to distribute your ssh key to the `authorized_key` file.
 
 In this case, `all` means will be trasferred to all host in our inventory.
 `-b` is used because will 'become' sudo, due to `-K` specified.
+
 There is no needed anymore `-k` because we have already trasnferred our ssh public key to `authorized_keys` and prompt ssh password is not nedded.
 `-m` is used to specify the `copy` module.
+
 Finally `-a` is used for specify the other attributes enclosed by `""`.
 
 If you try to run the previous command without -K ( sudo privilege ), will work too because we have already create the tux user file in sudoers.d directory
 
 ### Listing Ansible Documentation Modules  ###
 `$ ansible-doc -l`
+
 `$ ansible-doc user` -> For viewing about user module documentation
 I you want to view 'Examples', just type `\EXAMPLE`, and inside the response it will redirect the Example section. 
 
