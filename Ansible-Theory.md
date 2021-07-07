@@ -361,3 +361,20 @@ O playbook must be located in the same folder of inventory.
 
 `$ ansible-playbook -e user_name=suki user.yml`
  
+#### Create User (Example) [create_user_jodi.yml] #####
+```
+---
+- name: Create user
+  hosts: all
+  become: true
+  gather_facts: false
+  tasks:
+    - name: create user
+      user:
+        name: 'jodi'
+```
+
+And is executed as follows:
+`$ ansible-playbook create_user_jodi.yml `
+If you prefer check syntax previously, you can type: 
+`$ ansible-playbook create_user_jodi.yml --syntax-check `
