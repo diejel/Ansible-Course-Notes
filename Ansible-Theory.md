@@ -267,7 +267,17 @@ O playbook must be located in the same folder of inventory.
 
 ### Using variables in Playbooks ###
 
+```
+---
 
+- name: Play 1
+  hosts: all
+  tasks:
+     - name: task 1
+       debug:
+         msg: "The hostname is {{ ansible_fqdn }}"
+
+```
 
 
 
