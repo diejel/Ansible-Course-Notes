@@ -293,6 +293,33 @@ O playbook must be located in the same folder of inventory.
         `gather_facts: false`
 
 
+## Creating Users ##
+- Look necessary documentation by doing `$ ansible-doc user`
+### Simplest User Creation ###
+```
+---
+
+- name: User Creation
+  hosts: all
+  gather_facts: false
+  become: true
+  tasks:
+    - name: Create User
+      user:
+        name: Jodi
+
+```
+
+### Simplest User Deletion ###
+
+```
+---
+
+- name: Delete User
+  hosts
+
+```
+
 
 
 
