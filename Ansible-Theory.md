@@ -346,7 +346,8 @@ O playbook must be located in the same folder of inventory.
         - user3
 ```
 
-`user.yml  [file]`
+user.yml  [file]
+```
 --- 
 
 - name: Multiple Items
@@ -358,10 +359,10 @@ O playbook must be located in the same folder of inventory.
         name: "{{ user_name }}"
 
 ```
-
+To create by using ad-hoc commands:
 `$ ansible-playbook -e user_name=suki user.yml`
  
-#### Create User (Example) [create_user_jodi.yml] #####
+### Create User (Example) [create_user_jodi.yml] ###
 ```
 ---
 - name: Create user
