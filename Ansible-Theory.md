@@ -316,11 +316,48 @@ O playbook must be located in the same folder of inventory.
 ---
 
 - name: Delete User
-  hosts
+  hosts: all
+  become: true
+  gather_facts: false
+  tasks:
+  - name: Delete User Account
+    user:
+      name: jodi
+      state: absent
+      remove: true
 
 ```
 
+### Create Multiple Users ###
 
+```
+---
 
+- name: Multiple Items
+  hosts: all
+  become: true
+  tasks:
+    - name: create many users
+      user:
+        name: "{{ item }}"
+      loop:
+        - user1
+        - user2
+        - user3
+```
 
+`user.yml  [file]`
+--- 
+
+- name: Multiple Items
+  hosts: all
+  become: true
+  tasks:
+    - name: create many users
+      user:
+        name: "{{ user_name }}"
+
+```
+
+`$ ansible-playbook -e user_name=suki user.yml`
  
