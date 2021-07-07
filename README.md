@@ -375,3 +375,22 @@ And is executed as follows:
 
 If you prefer check syntax previously, you can type: 
 `$ ansible-playbook create_user_jodi.yml --syntax-check `
+
+
+To corroborate that the user `jodi` was added successfully, you can type:
+
+`ansible all -m command -a 'getent passwd <user>'`
+
+`ansible all -m command -a 'getent passwd jodi'`
+
+The output:
+
+```
+192.168.56.2 | CHANGED | rc=0 >>
+jodi:x:1002:1002::/home/jodi:/bin/bash
+192.168.56.4 | CHANGED | rc=0 >>
+jodi:x:1002:1002::/home/jodi:/bin/sh
+192.168.56.3 | CHANGED | rc=0 >>
+jodi:x:1002:1002::/home/jodi:/bin/bash
+
+```
