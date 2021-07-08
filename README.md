@@ -468,4 +468,4 @@ jodi:x:1002:1002::/home/jodi:/bin/bash
 - Consider that `user_name` is any variable that is not being used. 
 - To proceed, just execute as follows
 
-`$ ansible-playbook -e "user_name=jaiminho"create_user_variable_substitution.yml `
+`$ ansible-playbook -e "user_name=jaiminho"  create_user_variable_substitution.yml `
