@@ -394,3 +394,60 @@ jodi:x:1002:1002::/home/jodi:/bin/sh
 jodi:x:1002:1002::/home/jodi:/bin/bash
 
 ```
+### Delete User (Example) [delete_user_jodi.yml] ###
+
+```
+---
+- name: Delete user
+  hosts: all
+  become: true
+  gather_facts: false
+  tasks:
+    - name: delete user
+      user:
+        name: 'jodi'
+        state: 'absent'
+        remove: true
+
+```
+
+### Create Multiple User (Example) [create_multiple_user.yml] ###
+
+```
+---
+- name: multiple user
+  hosts: all
+  become: true
+  gather_facts: false
+  tasks:
+    - name: create multiple user
+      user:
+        name: "{{ item }}"
+      loop:
+        - petu
+        - barry
+        - strinky
+        
+```
+
+### Delete Multiple User (Example) [delete_multiple_user.yml] ###
+
+```
+---
+- name: multiple user
+  hosts: all
+  become: true
+  gather_facts: false
+  tasks:
+    - name: create multiple user
+      user:
+        name: "{{ item }}"
+        state: 'absent'
+        remove: true
+      loop:
+        - petu
+        - barry
+        - strinky
+        
+```
+
