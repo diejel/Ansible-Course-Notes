@@ -439,7 +439,7 @@ jodi:x:1002:1002::/home/jodi:/bin/bash
   become: true
   gather_facts: false
   tasks:
-    - name: create multiple user
+    - name: delete multiple user
       user:
         name: "{{ item }}"
         state: 'absent'
@@ -451,3 +451,21 @@ jodi:x:1002:1002::/home/jodi:/bin/bash
         
 ```
 
+### Create User Using Variable Substitution (Example) [create_user_variable_substitution.yml] ###
+
+```
+---
+- name: multiple user
+  hosts: all
+  become: true
+  gather_facts: false
+  tasks:
+    - name: create multiple user
+      user:
+        name: "{{ user_name }}"
+        
+```
+- Consider that `user_name` is any variable that is not being used. 
+- To proceed, just execute as follows
+
+`$ ansible-playbook -e "user_name=jaiminho"create_user_variable_substitution.yml `
