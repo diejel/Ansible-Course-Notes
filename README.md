@@ -469,3 +469,39 @@ jodi:x:1002:1002::/home/jodi:/bin/bash
 - To proceed, just execute as follows
 
 `$ ansible-playbook -e "user_name=jaiminho"  create_user_variable_substitution.yml `
+
+%% User Passwords %%
+Paswords must be encrypted, this can be done using ansible functions or using python script.
+
+### Example of script in Python3 ###
+```
+#!/usr/bin/python3
+import sys, crypt
+
+if len(sys.argv)==1 : sys.exit("You must specify a new password")
+print(crypt.crypt(sys.argv[1], crypt.mksalt(crypt.METHOD_SHA512)))
+
+```
+The example above, will be used after. Now will be explained in case we use a native function of ansible for generating encrypted passwords.
+
+```
+---
+- name: Create Users with Password
+  hosts: all
+  become: true 
+  gather_facts: false
+  tasks:
+  - name: Create user account with encrypted password
+    user:
+      name: "{{ user_name}}"
+      password: "{{ 'AnyPassword12345' | password_hash('sha512','anyvalforsalt') }}"
+      update_password: on_create
+    when: user_create == 'yes'
+  - name: Delete user account 
+    user:
+      name: "{{ user_name }}"
+      state: 'absent'
+      remove: true
+    when: user_create == 'no'
+
+```
