@@ -505,3 +505,44 @@ The example above, will be used after. Now will be explained in case we use a na
     when: user_create == 'no'
 
 ```
+## Create ANsible User ##
+
+### Create identical remote users for ansible ###
+
+Until now, we have been created _standard user accounts_ using Ansible. I$
+This account will need the following items:
+
+- DevOps user account.
+- Passwordless _sudo_ access.
+- ssh key based	authentication from our	controller account.
+
+### Task to add _sudo_ access ###
+
+At creating the user named as "devops" we can add paswordless access for the user.
+
+```
+- name: Setup sudo access
+  copy:
+        dest: /etc/sudoers.d/devops
+        content: 'devops ALL=(ALL) NOPASSWD: ALL'
+	validate: /usr/sbin/visudo -cf %s
+```
+
+From the code above, we have used the _copy_ module, and was specified the destination path of the new file called `devops` inside
+the _sudoers.d_ folder, in that way it grants passwordless for any future command that it needs sudo access. The `devops` file must contains the indicated _content_. Finally, the content is verfied with the command `visudo -cf <file>` that is represented by %s.
+
+
+### Adding your local SSH Key ###
+
+Until now we have bee using the _tux_ user account for modify and create things.
+We will use that user for copy its SSH public key to the remote _devops_ account.
+
+```
+- name: Install Local User Key
+  authorized_key:
+        user: devops
+	state: present
+	manage_dir: true
+	key: "{{ lookup{'file','/home/tux/.ssh/id_rsa.pub'}  }}"
+```
+
