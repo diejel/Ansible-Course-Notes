@@ -509,7 +509,7 @@ The example above, will be used after. Now will be explained in case we use a na
 
 ### Create identical remote users for ansible ###
 
-Until now, we have been created _standard user accounts_ using Ansible. I$
+Until now, we have been created _standard user accounts_ using Ansible.
 This account will need the following items:
 
 - DevOps user account.
@@ -544,5 +544,155 @@ We will use that user for copy its SSH public key to the remote _devops_ account
 	state: present
 	manage_dir: true
 	key: "{{ lookup{'file','/home/tux/.ssh/id_rsa.pub'}  }}"
+```
+
+### Creating thedevops account ###
+
+Generate inside the `/users` folder  a _.vim_ file named _devops_.
+
+`vim /home/tux/ansible/users/devops.yml`
+
+```
+---
+
+- name: Deploy devops account
+  hosts: all
+  become: true
+  tasks:
+    - name: create account
+      user:
+	name: devops
+    - name: sudo access
+      copy:
+	dest: /etc/sudoers.d/devops
+        content: 'devops ALL=(ALL) NOPASSWD: ALL'
+	validate: /usr/sbin/visudo -cf %s
+    - name: ssh key
+      authorized_key:
+        user: devops
+        state: present
+	manage_dirs: true
+	key: "{{ lookup( 'file', '/home/tux/.ssh/id_rsa.pub') }}"
+
+```
+
+## Working with Variables and Facts ##
+
+For example CentOS and Ubuntu use different package management, `yum` for CentOS and `apt` for Ubuntu.
+The process of intallation of different packages can be optimized by using conditional and variables to detect which distribution is being used.
+
+For example _Apache Web Server_ is treated with the follwing names:
+
+- Ubuntu (apache2)
+- CentOS (httpd)
+
+The default admin groups are:
+
+- Ubuntu (sudo)
+- CentOS (wheel)
+
+The use of variables can be performed in host groups to represent group names as an example.
+
+### Using Multiple Plays ###
+
+If we use _host groups_ to deploy a play, for example 02 groups called
+_Ubuntu_ and _CentOS_ we can use 02 plays.
+
+```
+---
+- name: Ubuntu Play
+  hosts: ubuntu
+  tasks:
+   - name: install apache
+     apt:
+      name: apache2
+``` 
+
+### Using Facts ###
+
+It is useful when an specific task must be targeted to an specific distribution. The clause `when` should be used, as similar as
+a conditional statement. In that way, you can use just only one play with multiple tasks.
+
+```
+---
+- name: Deploy apache
+  hosts: all
+  tasks:
+   - name: install apache
+     yum:
+      name: httpd
+     when: ansible_distribution == 'CentOS'
+
+```
+
+Another example:
+
+```
+---
+- name: Deploy Apache
+  hosts: local
+  become: true
+  gather_facts: true
+  tasks:
+   - name: install apache centos
+     yum:
+      name: httpd
+     when: ansible_distribution == 'CentOS'
+   - name: install apache ubuntu
+     apt:
+      name: apache2
+     when: ansible_distribution == 'Ubuntu'
+
+```
+
+### Consider Inventory Variables ###
+
+It is recommended create those variables in our folder `group_vars` previously created.
+
+```
+$ mkdir groups_vars/
+$ echo "admin: wheel" > group_vars/centos
+$ echo "web_package: httpd" >> group_vars/centos
+$ echo "admin : sudo" > group_vars/ubuntu
+$ echo "web_package: apache2" >> group_vars/ubuntu
+
+```
+
+### Playbook using variables "Admin Groups" ###
+
+Using variables can be a good idea to caster for differences
+
+```
+---
+- name: Create Admin User
+  hosts: webservers
+  gather_facts: no
+  become: true
+  tasks:
+    - name: Create User
+      user:
+        name: bob
+        groups:
+         - "{{ admin }}"
+
+```
+
+### Playbook Using Variables "Package MOdule" ###
+
+The package module is nice because it allows the correct _apt_ or  _yum_ package management
+be detected. WIth the correct variable set in `group_vars/` this works good.
+
+```
+---
+- name: Install apache
+  hosts: webservers
+  gather_facts: no
+  become: true
+  tasks:
+  
+   - name: install apache
+     package:
+       name: "{{ web_package }}"
+       state: latest
 ```
 
