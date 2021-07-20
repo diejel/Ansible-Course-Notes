@@ -221,7 +221,7 @@ I you want to view 'Examples', just type `\EXAMPLE`, and inside the response it 
  - Single tab != single white-space
  - You can make vim as a valid yaml editor (~/.vimrc)
  
-#### Comapring Tab to Spaces ###
+### Comapring Tab to Spaces ###
 - 8 spaces = 1 tab (With standard tab setting)
 - `:set list` , helps to view that 
     - 8 spaces in vim
