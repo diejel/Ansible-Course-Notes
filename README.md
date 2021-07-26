@@ -710,6 +710,7 @@ $ cp ../users/ansible.cfg .
 $ cp ../users/inventory .
 
 ```
+
 Inside the new folder `lamp`, will be created files:
 
 ```
@@ -721,3 +722,20 @@ echo "web_package: apache2" >> group_vars/ubuntu
 
 ```
 
+We create a simple .yml file (user.yml):
+
+```
+---
+- name: play
+  hosts: all
+  tasks:
+    - name: tasks
+      user:
+        name: devops
+        groups: "{{ admin  }}"
+
+```
+
+Executing the file `$ ansible-playbook user.yml` will assign the `devops` account to the group `sudo`, using the alias
+or variable created in _*group_vars/ubuntu*_ .
+ 
