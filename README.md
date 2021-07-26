@@ -696,3 +696,28 @@ be detected. WIth the correct variable set in `group_vars/` this works good.
        state: latest
 ```
 
+## Lab Time! ##
+
+Will be create a new directory `lamp` inside `/home/tux/ansible/users/` path. And will be copied the follwing files from the parent folder.
+
+- ansible.cfg
+- inventory
+
+```
+$ cd /home/tux/ansible/users
+$ mkdir -p lamp/{host,group}_vars
+$ cp ../users/ansible.cfg .
+$ cp ../users/inventory .
+
+```
+Inside the new folder `lamp`, will be created files:
+
+```
+echo "ansible_connection: local" > host_vars/192.168.56.2
+echo "admin: wheel" >> group_vars/centos
+echo "web_package: httpd" >> group_vars/centos
+echo "admin: sudo" >> group_vars/ubuntu
+echo "web_package: apache2" >> group_vars/ubuntu
+
+```
+
