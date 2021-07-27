@@ -763,6 +763,13 @@ Create the file `apache-multi-play.yml`:
 ```
 To execute, `$ ansible-playbook apache-multi-play.yml` .
 Obs: This method is difficult to maintain in a long term because of code duplication, but is simple to implement.
+Obs: May occur that at running the playbook may gives an error due to the repository is not updated, I recommend
+change the server of update to the 'main server'. You can make it using the GUI or by terminal just by editing the
+`/etc/apt/sources.list` file. You should take off any country code that precedes the [xy].archive.ubuntu.com.
+```
+sed -r -i "s/[a-zA-Z]{1,3}\.archive/archive/g" /etc/apt/sources.list
+
+```
 ### Installing Apache ( Logic ) ###
 
 Create the file `apache-using-logic.yml`:
