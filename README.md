@@ -696,3 +696,126 @@ be detected. WIth the correct variable set in `group_vars/` this works good.
        state: latest
 ```
 
+## Lab Time! ##
+
+Will be create a new directory `lamp` inside `/home/tux/ansible/users/` path. And will be copied the follwing files from the parent folder.
+
+- ansible.cfg
+- inventory
+
+```
+$ cd /home/tux/ansible/users
+$ mkdir -p lamp/{host,group}_vars
+$ cp ../users/ansible.cfg .
+$ cp ../users/inventory .
+
+```
+
+Inside the new folder `lamp`, will be created files:
+
+```
+echo "ansible_connection: local" > host_vars/192.168.56.2
+echo "admin: wheel" >> group_vars/centos
+echo "web_package: httpd" >> group_vars/centos
+echo "admin: sudo" >> group_vars/ubuntu
+echo "web_package: apache2" >> group_vars/ubuntu
+
+```
+
+We create a simple .yml file (user.yml):
+
+```
+---
+- name: play
+  hosts: all
+  tasks:
+    - name: tasks
+      user:
+        name: devops
+        groups: "{{ admin  }}"
+
+```
+
+Executing the file `$ ansible-playbook user.yml` will assign the `devops` account to the group `sudo`, using the alias
+or variable created in _*group_vars/ubuntu*_ .
+ 
+### Installing Apache (Multiple Plays) ###
+
+Create the file `apache-multi-play.yml`:
+
+```
+---
+- name: ubuntu
+  hosts: ubuntu
+  tasks:
+    - name: install apache
+      apt:
+        name: apache2
+        state: latest
+- name: centos
+  hosts: centos
+  tasks:
+    - name: install apache
+      yum:
+       name: httpd
+       state: latest
+   
+```
+To execute, `$ ansible-playbook apache-multi-play.yml` .
+Obs: This method is difficult to maintain in a long term because of code duplication, but is simple to implement.
+Obs: May occur that at running the playbook may gives an error due to the repository is not updated, I recommend
+change the server of update to the 'main server'. You can make it using the GUI or by terminal just by editing the
+`/etc/apt/sources.list` file. You should take off any country code that precedes the [xy].archive.ubuntu.com.
+```
+sed -r -i "s/[a-zA-Z]{1,3}\.archive/archive/g" /etc/apt/sources.list
+
+```
+### Installing Apache ( Logic ) ###
+
+Create the file `apache-using-logic.yml`:
+
+```
+---
+- name: apache
+  hosts: all
+  tasks:
+    - name: install apache ubuntu
+      apt:
+        name: apache2
+        state: latest
+      when: ansible_distribution == 'Ubuntu'
+
+    - name: install apache centos
+      yum:
+        name: httpd
+        state: latest
+      when: ansible_distribution == 'CentOS'
+   
+```
+
+To execute, `$ ansible-playbook apache-using-logic.yml` .
+
+
+
+### Installing Apache ( Variables) ###
+
+Create the file `apache-using-variables.yml`:
+
+```
+---
+- name: apache
+  hosts: all
+  tasks:
+    - name: install apache ubuntu
+      package:
+        name: "{{ web_package }}"
+        state: latest
+   
+```
+
+To execute, `$ ansible-playbook apache-using-variables.yml` .
+
+
+
+
+
