@@ -578,6 +578,7 @@ Generate inside the `/users` folder  a _.vim_ file named _devops_.
 
 ### Ad-hoc command to create user account in every inventory hosts ###
 
+I will create the `ansible` user in every host that belongs to the inventory file.
 ```
 user_password=$( openssl passwd -6 Password1 )
 [user@host]$ echo $user_password
