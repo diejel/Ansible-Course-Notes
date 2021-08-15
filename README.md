@@ -287,6 +287,27 @@ O playbook must be located in the same folder of inventory.
 - Remember disable gather_facts in your ansible script.
         `gather_facts: false`
 
+### Understanding why use/not use "gather facts" ###
+
+Gather facts option is useful when you need to acquire information from the host. But maybe, sometimes is not necessary for a particular play, in that way is better not use in order to accomplish the task faster.
+ - Here we have an example of playbook using facts.
+
+```
+---
+- name: My first play
+  hosts: all
+  become: true
+  tasks:
+         - name: Install software
+           package:
+                   name: bash-completion
+                   state: present
+         - name: Show hostname
+           debug:
+                   msg: "This host is {{ ansible_hostname }}"
+
+```
+
 
 ## Creating Users ##
 - Look necessary documentation by doing `$ ansible-doc user`
