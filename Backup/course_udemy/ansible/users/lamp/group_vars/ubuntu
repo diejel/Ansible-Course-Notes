@@ -1,0 +1,2 @@
+admin: sudo
+web_package: apache2

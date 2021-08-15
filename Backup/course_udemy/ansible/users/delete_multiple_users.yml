@@ -1,0 +1,17 @@
+---
+- name: multiple user
+  hosts: all
+  become: true
+  gather_facts: false
+  tasks:
+    - name: delete multiple user
+      user:
+        name: "{{ item }}"
+        state: 'absent'
+        remove: true
+      loop:
+        - petu
+        - barry
+        - strinky
+        
+

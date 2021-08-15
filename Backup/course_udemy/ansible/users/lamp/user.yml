@@ -1,0 +1,9 @@
+---
+- name: play
+  hosts: all
+  tasks:
+    - name: tasks
+      user:
+        name: devops
+        groups: "{{ admin  }}"
+

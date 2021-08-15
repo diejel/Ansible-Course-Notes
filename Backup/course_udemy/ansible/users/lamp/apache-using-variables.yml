@@ -1,0 +1,10 @@
+---
+- name: apache
+  hosts: all
+  tasks:
+    - name: install apache ubuntu
+      package:
+        name: "{{ web_package }}"
+        state: latest
+   
+

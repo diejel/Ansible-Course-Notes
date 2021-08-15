@@ -1,0 +1,10 @@
+---
+
+- name: Play 1
+  hosts: all
+  tasks:
+     - name: task 1
+       debug:
+         msg: "The hostname is {{ ansible_fqdn }}"
+
+

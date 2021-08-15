@@ -1,0 +1,13 @@
+---
+- name: Delete user
+  hosts: all
+  become: true
+  gather_facts: false
+  tasks:
+    - name: delete user
+      user:
+        name: 'jodi'
+        state: 'absent'
+        remove: true
+
+

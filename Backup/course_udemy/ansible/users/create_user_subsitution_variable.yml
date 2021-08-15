@@ -1,0 +1,11 @@
+---
+- name: multiple user
+  hosts: all
+  become: true
+  gather_facts: false
+  tasks:
+    - name: create multiple user
+      user:
+        name: "{{ user_name }}"
+        
+

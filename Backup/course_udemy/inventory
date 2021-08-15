@@ -1,0 +1,13 @@
+[webservers]
+192.168.56.[2:4]
+
+[ubuntu]
+192.168.56.4
+
+[centos]
+192.168.56.[2:3]
+
+[uk:children]
+ubuntu
+centos
+
