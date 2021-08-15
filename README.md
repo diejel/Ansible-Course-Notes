@@ -637,6 +637,14 @@ This is the output:
 
 ```
 
+For verifying the account creation, you can perform this:
+```
+[user@host]$ getent passwd ansible
+ansible:x:1005:1005::/home/ansible:/bin/bash
+[user@host]$ sudo getent shadow ansible
+ansible:$6$aqBxnzLdlawurBaM$IXSz4f5tc3QF08C6i98IVHpZpcl5fvQkSYOCZVaqDbKkXGqS2QlmTH502vnZKHJvWXNEiMPozLv2JTWD1AoKf1:18854:0:99999:7:::
+```
+
 ## Working with Variables and Facts ##
 
 For example CentOS and Ubuntu use different package management, `yum` for CentOS and `apt` for Ubuntu.
