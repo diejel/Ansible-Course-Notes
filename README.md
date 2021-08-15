@@ -546,7 +546,7 @@ We will use that user for copy its SSH public key to the remote _devops_ account
 	key: "{{ lookup{'file','/home/tux/.ssh/id_rsa.pub'}  }}"
 ```
 
-### Creating thedevops account ###
+### Creating the devops account ###
 
 Generate inside the `/users` folder  a _.vim_ file named _devops_.
 
@@ -573,6 +573,67 @@ Generate inside the `/users` folder  a _.vim_ file named _devops_.
         state: present
 	manage_dirs: true
 	key: "{{ lookup( 'file', '/home/tux/.ssh/id_rsa.pub') }}"
+
+```
+
+### Ad-hoc command to create user account in every inventory hosts ###
+
+```
+user_password=$( openssl passwd -6 Password1 )
+[user@host]$ echo $user_password
+$6$aqBxnzLdlawurBaM$IXSz4f5tc3QF08C6i98IVHpZpcl5fvQkSYOCZVaqDbKkXGqS2QlmTH502vnZKHJvWXNEiMPozLv2JTWD1AoKf1
+[user@host]$ ansible all -kKbm user -a "name=ansible password=$user_password"
+SSH password:
+BECOME password[defaults to SSH password]:
+```
+This is the output:
+
+```
+192.168.56.4 | CHANGED => {
+    "changed": true,
+    "comment": "",
+    "create_home": true,
+    "group": 1005,
+    "home": "/home/ansible",
+    "name": "ansible",
+    "password": "NOT_LOGGING_PASSWORD",
+    "shell": "/bin/sh",
+    "state": "present",
+    "system": false,
+    "uid": 1005
+}
+192.168.56.2 | CHANGED => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/libexec/platform-python"
+    },
+    "changed": true,
+    "comment": "",
+    "create_home": true,
+    "group": 1005,
+    "home": "/home/ansible",
+    "name": "ansible",
+    "password": "NOT_LOGGING_PASSWORD",
+    "shell": "/bin/bash",
+    "state": "present",
+    "system": false,
+    "uid": 1005
+}
+192.168.56.3 | CHANGED => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/libexec/platform-python"
+    },
+    "changed": true,
+    "comment": "",
+    "create_home": true,
+    "group": 1005,
+    "home": "/home/ansible",
+    "name": "ansible",
+    "password": "NOT_LOGGING_PASSWORD",
+    "shell": "/bin/bash",
+    "state": "present",
+    "system": false,
+    "uid": 1005
+}
 
 ```
 
