@@ -695,6 +695,26 @@ ansible:x:1005:1005::/home/ansible:/bin/bash
 [user@host]$ sudo getent shadow ansible
 ansible:$6$aqBxnzLdlawurBaM$IXSz4f5tc3QF08C6i98IVHpZpcl5fvQkSYOCZVaqDbKkXGqS2QlmTH502vnZKHJvWXNEiMPozLv2JTWD1AoKf1:18854:0:99999:7:::
 ```
+### Allowing Passwordless Sudo Access for `ansible` user ###
+- Create one file that contains the following fields
+
+`echo "ansible ALL=(root) NOPASSWD: ALL" > ansible`
+
+- Corroborate if syntax is ok: `sudo visudo -cf ansible`
+
+- Copy to /etc/sudoers.d at your destination machines
+
+ `$ ansible all -bkK -m copy -a "src=ansible dest=/etc/sudoers.d/ansible" `
+
+### SSH Key authentication ###
+
+- Here, will be trasnferred our public key that is located in `home/<other_user>/.ssh` to  ansible user folder at our destination controlled clients
+
+` $ ansible all -bkKm authorizes_key -a "user='ansible' state='present' key='{{ lookup( 'file', '/home/tux/.ssh/id_rsa.pub' ) }}' " `
+
+
+
+
 ## Install Multiple Package with Playbook  ##
 A biefly playbook [install-multi-pkgs.yml] for you understand how to install package in your inventory hosts.
 
