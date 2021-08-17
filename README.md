@@ -684,6 +684,67 @@ ansible:x:1005:1005::/home/ansible:/bin/bash
 [user@host]$ sudo getent shadow ansible
 ansible:$6$aqBxnzLdlawurBaM$IXSz4f5tc3QF08C6i98IVHpZpcl5fvQkSYOCZVaqDbKkXGqS2QlmTH502vnZKHJvWXNEiMPozLv2JTWD1AoKf1:18854:0:99999:7:::
 ```
+## Install Multiple Package with Playbook  ##
+A biefly playbook [install-multi-pkgs.yml] for you understand how to install package in your inventory hosts.
+
+```
+---
+- name: My second play
+  hosts: all
+  become: true
+  tasks:
+          - name: Install many softwares
+            package:
+              name:
+                    - bash-completion
+                    - vim
+                    - tree
+                    - nano
+              state: present
+          - name: Show hostname where it has been installed
+            debug:
+                    msg: "This host is {{ansible_hostname}}"
+
+```
+
+Now, you have to execute it as follows:
+
+- `$ ansible-playbook install-multi-pkgs.yml `
+
+The output:
+
+```
+[user@host]$ ansible-playbook install-multi-pkgs.yml
+
+PLAY [My second play] **********************************************************************************************************************************************
+
+TASK [Gathering Facts] *********************************************************************************************************************************************
+ok: [192.168.56.2]
+ok: [192.168.56.3]
+ok: [192.168.56.4]
+
+TASK [Install many softwares] **************************************************************************************************************************************
+ok: [192.168.56.2]
+changed: [192.168.56.3]
+changed: [192.168.56.4]
+
+TASK [Show hostname where it has been installed] *******************************************************************************************************************
+ok: [192.168.56.2] => {
+    "msg": "This host is bob"
+}
+ok: [192.168.56.3] => {
+    "msg": "This host is alice"
+}
+ok: [192.168.56.4] => {
+    "msg": "This host is ubuntu"
+}
+
+PLAY RECAP *********************************************************************************************************************************************************
+192.168.56.2               : ok=3    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+192.168.56.3               : ok=3    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+192.168.56.4               : ok=3    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+```
 
 ## Working with Variables and Facts ##
 
