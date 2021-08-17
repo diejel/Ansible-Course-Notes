@@ -307,7 +307,25 @@ Gather facts option is useful when you need to acquire information from the host
                    msg: "This host is {{ ansible_hostname }}"
 
 ```
+You can get all details of your machine by using the module "SETUP", you can do the following :
 
+- `$ ansible <host/group> -m setup`
+
+Where host, group or IP addressis valid field :) . Below is an example using the group _centos_ which contains 02 host with different IP address. I have also make a search using `grep` in order to filter network details about those hosts. 
+```
+[user@host ~]$ ansible centos -m setup | grep -i '192.168.56.'
+192.168.56.3 | SUCCESS => {
+            "192.168.56.3"
+                "address": "192.168.56.3",
+                "broadcast": "192.168.56.255",
+                "network": "192.168.56.0"
+192.168.56.2 | SUCCESS => {
+            "192.168.56.2"
+                "address": "192.168.56.2",
+                "broadcast": "192.168.56.255",
+                "network": "192.168.56.0"
+
+```
 
 ## Creating Users ##
 - Look necessary documentation by doing `$ ansible-doc user`
