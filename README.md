@@ -241,6 +241,17 @@ I you want to view 'Examples', just type `\EXAMPLE`, and inside the response it 
     ```set bg=dark
        autocmd Filetype yaml setlocal ai et ts=2 sw=2 cuc cul
      ```
+### Sample how to format .nanorc file ###
+- Open any editor you prefer and create in `$HOME/.nanorc` file.
+- This file must content:
+
+```
+set autoindent
+set tabsize 2
+set tabstospaces
+
+```
+
 ### Sample of PLaybook ####
 - Contains a list of plays 
 - A play contians -> list of tasks
