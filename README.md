@@ -710,7 +710,7 @@ ansible:$6$aqBxnzLdlawurBaM$IXSz4f5tc3QF08C6i98IVHpZpcl5fvQkSYOCZVaqDbKkXGqS2Qlm
 
 - Here, will be trasnferred our public key that is located in `home/<other_user>/.ssh` to  ansible user folder at our destination controlled clients
 
-` $ ansible all -bkKm authorizes_key -a "user='ansible' state='present' key='{{ lookup( 'file', '/home/tux/.ssh/id_rsa.pub' ) }}' " `
+` $ ansible all -bkKm authorized_key -a "user='ansible' state='present' key='{{ lookup( 'file', '/home/tux/.ssh/id_rsa.pub' ) }}' " `
 
 
 
