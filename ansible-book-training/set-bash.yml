@@ -6,7 +6,7 @@
   tasks:
      - name: Create user
        user:
-         
-       shell: /bin/bash
-       state: present
+         name: ansible  
+         shell: /bin/bash
+         state: present
 ...
