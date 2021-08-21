@@ -553,9 +553,9 @@ The example above, will be used after. Now will be explained in case we use a na
       state: 'absent'
       remove: true
     when: user_create == 'no'
-
 ```
-## Create ANsible User ##
+
+## Create Ansible User ##
 
 ### Create identical remote users for ansible ###
 
