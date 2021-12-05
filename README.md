@@ -188,6 +188,7 @@ folders for example "`host_vars`, `group_vars`" groups.
 Are performed from the command line , ansible must target nodes and reference a python module.
 
 Example: `$ ansible_connection=local   ansible    localhost   -m  ping `
+
             |__ optional variable__|   |_ cmd_|  |_ target _|  |_module _|
 `-m` -> to reference the ansible module
 
