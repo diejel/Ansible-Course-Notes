@@ -78,7 +78,13 @@ Next, lookup for an Ansible version
 
 ```
 From results above, we will use the (5) option
+
 `$ sudo subscription-manager --enable ansible-2.9-for-rhel-8-x86_64-rpms`
+
+```
+[vagrant@rhel8 ~]$ sudo subscription-manager repos --enable ansible-2.9-for-rhel-8-x86_64-rpms
+Repository 'ansible-2.9-for-rhel-8-x86_64-rpms' is enabled for this system.
+
 
 ### Configuration Hierarchy ###
 Environmental Variable: `ANSIBLE_CONFIG`
