@@ -208,7 +208,9 @@ Example: Installation of zsh
 
   ```
 If you would like to remove the above package:
+
   - `$ ansible_connection=local ansible localhost -b -m package -a 'name=zsh state=absent' `
+  
 Some definitions of arguments:
 
 `-m` -> to reference the ansible module
@@ -449,6 +451,18 @@ Where host, group or IP addressis valid field :) . Below is an example using the
                 "address": "192.168.56.2",
                 "broadcast": "192.168.56.255",
                 "network": "192.168.56.0"
+```
+Example: Using ad-hoc command and _setup_ module and attribute _filter_ for filtering results.
+
+```
+  [vagrant@rhel8 ~]$ ansible_connection=local ansible localhost -m setup \
+  > -a "filter=ansible_os_family"
+  localhost | SUCCESS => {
+      "ansible_facts": {
+          "ansible_os_family": "RedHat"
+      },
+      "changed": false
+  }
 
 ```
 
