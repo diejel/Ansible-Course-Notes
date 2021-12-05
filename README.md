@@ -19,6 +19,30 @@ Debian:
 
 `sudo apt install -y ansible sshpass` 
 
+RHEL:
+
+Enabling Ansible on RHEL 8
+
+`$ sudo subscription-manager repos --list | grep ansible`
+- _*Remember* register before your RHEL machine:_
+  - ```  
+     [vagrant@rhel8 ~]$ sudo subscription-manager register \
+      > --username user --password pass --auto-attach
+      Registering to: subscription.rhsm.redhat.com:443/subscription
+      The system has been registered with ID: xxxxxx-xxxxxx-xxxxx-xxxxxx
+      The registered system name is: rhel8
+      Installed Product Current Status:
+      Product Name: Red Hat Enterprise Linux for x86_64
+      Status:       Subscribed
+
+
+      WARNING
+
+      The yum/dnf plugins: /etc/dnf/plugins/subscription-manager.conf were automatically enabled for the benefit of Red Hat Subscription Management. If not desired, use "subscription-manager config --rhsm.auto_enable_yum_plugins=0" to block this behavior.
+
+  ```
+`$ sudo subscription-manager --enable ansible-2.9-for-rhel-8-x86_64-rpms`
+
 ### Configuration Hierarchy ###
 Environmental Variable: `ANSIBLE_CONFIG`
 
