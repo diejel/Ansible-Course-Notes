@@ -190,6 +190,26 @@ Are performed from the command line , ansible must target nodes and reference a 
 Example: `$ ansible_connection=local   ansible    localhost   -m  ping `
 
             |__ optional variable__|   |_ cmd_|  |_ target _|  |_module _|
+
+Example: Installation of zsh 
+
+`$ ansible_connection=local ansible localhost -b -m package -a 'name=zsh' `
+
+  ```
+  [vagrant@rhel8 ~]$ ansible_connection=local ansible localhost -b -m package -a 'name=zsh'
+  localhost | CHANGED => {
+      "changed": true,
+      "msg": "",
+      "rc": 0,
+      "results": [
+          "Installed: zsh-5.5.1-6.el8_1.2.x86_64"
+      ]
+  }
+
+  ```
+
+Some definitions of arguments:
+
 `-m` -> to reference the ansible module
 
 `-a` -> to reference optional arguments to module
@@ -197,6 +217,8 @@ Example: `$ ansible_connection=local   ansible    localhost   -m  ping `
 `-i` -> to reference a different inventory
 
 `-k` -> to prompt for ssh password
+
+`-b` -> to elevate privileges
 
 ### Basic Configuration ###
 From inventory hosts we will perform a simple script for
