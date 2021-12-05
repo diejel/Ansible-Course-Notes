@@ -207,7 +207,8 @@ Example: Installation of zsh
   }
 
   ```
-
+If you would like to remove the above package:
+  - `$ ansible_connection=local ansible localhost -b -m package -a 'name=zsh state=absent' `
 Some definitions of arguments:
 
 `-m` -> to reference the ansible module
