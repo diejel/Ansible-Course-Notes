@@ -184,6 +184,11 @@ folders for example "`host_vars`, `group_vars`" groups.
 `$ echo "ansible_connection: local" > host_vars/192.168.56.2`
 
 ### Ad-hoc commands ###
+
+Are performed from the command line , ansible must target nodes and reference a python module.
+
+Example: `$ ansible_connection=local   ansible    localhost   -m  ping `
+            |__ optional variable__|   |_ cmd_|  |_ target _|  |_module _|
 `-m` -> to reference the ansible module
 
 `-a` -> to reference optional arguments to module
