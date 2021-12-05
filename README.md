@@ -89,7 +89,20 @@ From results above, we will use the (5) option
 ```
 [vagrant@rhel8 ~]$ sudo subscription-manager repos --enable ansible-2.9-for-rhel-8-x86_64-rpms
 Repository 'ansible-2.9-for-rhel-8-x86_64-rpms' is enabled for this system.
+
 ```
+
+To assure you're using you RHEL repository, and not EPEL repository, disable them.
+
+```
+$ sudo yum install -y dnf-plugins-core 
+$ sudo yum config-manager --disable epel epel-modular
+
+```
+
+Now, feel free to install Ansible being sure that will obtain from RHEL repository.
+
+`$ sudo yum install ansible -y`
 
 ### Configuration Hierarchy ###
 Environmental Variable: `ANSIBLE_CONFIG`
