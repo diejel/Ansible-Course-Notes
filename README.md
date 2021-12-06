@@ -128,8 +128,17 @@ ansible.cfg  in Working Directory
 `$ ansible-config dump`
 
 ### Show only non-default settings ###
+It shows what was has changed from reference main config file
+
 `$ ansible-config dump --only-changed`
 
+```
+[vagrant@rhel8 ~]$ ansible-config dump --only-changed
+DEFAULT_BECOME(/home/vagrant/.ansible.cfg) = True
+DEFAULT_HOST_LIST(/home/vagrant/.ansible.cfg) = ['/home/vagrant/inventory']
+DEFAULT_REMOTE_USER(/home/vagrant/.ansible.cfg) = tux
+
+```
 ## Sample of configuratio file ##
 ```
 [defaults]
