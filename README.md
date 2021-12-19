@@ -117,6 +117,14 @@ ansible.cfg  in Working Directory
 
 `echo > ~/.ansible.cfg`
 
+### **Securing ANSIBLE_CONFIG Variable** ###
+
+You can make this a Read-Only variable by performing within .bashrc file
+
+`$ declare -xr ANSIBLE_CONFIG=/etc/ansible/ansible.cfg`
+
+In that way, any bad actor who tries to modify variable won`t be able to. 
+
 ### Show current file contents ###
 
 `$ ansible-config view`
@@ -173,6 +181,59 @@ centos
 ubuntu
 ```
 
+### Perform a quickly search and creae an Inventory ###
+
+In this case we can use Nmap package in order to perform a deep and quick search of hosts within the network
+
+you can install nmap for Centos based:
+
+`$ yum install nmap`
+
+- The following command will perform a search for a target port 22 within a 192.168.56.0/24 network.
+- P: ping scan, Pn: not perform a ping-scan, p: target port, n: network.
+
+`$ sudo namp -Pn -p22 -n 192.168.56.0/24`
+
+```
+[vagrant@rhel8 ~]$ sudo nmap -Pn -p22 -n 192.168.56.0/24
+Starting Nmap 7.70 ( https://nmap.org ) at 2021-12-19 10:02 UTC
+Nmap scan report for 192.168.56.1
+Host is up (0.00037s latency).
+
+PORT   STATE    SERVICE
+22/tcp filtered ssh
+MAC Address: 0A:00:27:00:00:00 (Unknown)
+
+Nmap scan report for 192.168.56.12
+Host is up (0.00036s latency).
+
+PORT   STATE SERVICE
+22/tcp open  ssh
+MAC Address: 08:00:27:5B:1F:99 (Oracle VirtualBox virtual NIC)
+
+Nmap scan report for 192.168.56.13
+Host is up (0.00062s latency).
+
+PORT   STATE SERVICE
+22/tcp open  ssh
+MAC Address: 08:00:27:09:FF:36 (Oracle VirtualBox virtual NIC)
+
+Nmap scan report for 192.168.56.100
+Host is up (-0.089s latency).
+
+PORT   STATE    SERVICE
+22/tcp filtered ssh
+MAC Address: 08:00:27:A4:63:D5 (Oracle VirtualBox virtual NIC)
+
+Nmap scan report for 192.168.56.11
+Host is up (0.00012s latency).
+
+PORT   STATE SERVICE
+22/tcp open  ssh
+
+Nmap done: 256 IP addresses (5 hosts up) scanned in 12.66 seconds
+
+```
 
 ### Query Inventory ###
 This is the way how you make request to query
