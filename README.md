@@ -409,14 +409,37 @@ Finally `-a` is used for specify the other attributes enclosed by `""`.
 If you try to run the previous command without -K ( sudo privilege ), will work too because we have already create the tux user file in sudoers.d directory
 
 
-### **In case we have a Vagrant environment ddeployment** ###
+  ### **In case we have a Vagrant environment ddeployment** ###
 
-- We must copy vagrant keys to our controller node
-- Connect to nodes in order to test and collect node public keys
-- Create a user with sudo rights (wheel or sudo group) 
-- Key generation for vagrant in order to log in as "known" on remote nodes and distribution of this key to nodes.
-- Adjust config for using private key.
--   
+  - We must copy vagrant keys to our controller node
+  - Connect to nodes in order to test and collect node public keys
+  - Create a user with sudo rights (wheel or sudo group) 
+  - Key generation for vagrant in order to log in as "known" on remote nodes and distribution of this key to nodes.
+  - Adjust config for using private key.
+  
+  ### Vagrant SSH Keys ###
+
+  By default, ssh password authentication is disabled. Each time the system boots new keys are generated. Suppose that our snecario has 02 client nodes, we will setup for those nodes copy their update its keys in the controller.
+
+  SSH configuration in certain client node , can be verified as follows
+
+  `[user@hostsystem]$ vagrant ssh-config <node_name>`
+
+  ``` 
+  user@hostsystem: vagrant ssh-config ubuntu
+  Host ubuntu
+  HostName 127.0.0.1
+  User vagrant
+  Port 2201
+  UserKnownHostsFile /dev/null
+  StrictHostKeyChecking no
+  PasswordAuthentication no
+  IdentityFile /home/user/.vagrant/machines/ubuntu/virtualbox/private_key
+  IdentitiesOnly yes
+  LogLevel FATAL
+
+```
+
 
 ### Listing Ansible Documentation Modules  ###
 
