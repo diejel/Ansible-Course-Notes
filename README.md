@@ -514,7 +514,60 @@ private_key
 
 ```
 
+Now, from the controller will attempt to connect to our node client`s using the private key.
 
+`user@host > ssh -i <private_key_file> <target_node> `
+
+Be aware that by the first time, will appears a message like below and we have to add by typing "yes":
+
+```
+The authenticity of host 'A.B.C.D (A.B.C.D)' can't be established.
+ECDSA key fingerprint is SHA256:LBMCbc20y4j6I9XVddhCOk5m4hoyBaPJVBiCbcRz9X8.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added 'A.B.C.D' (ECDSA) to the list of known hosts.
+
+```
+
+- From controller to ubuntu node:
+
+```
+[vagrant@rhel8 ~]$ ssh -i ubuntu.key 192.168.56.13
+Welcome to Ubuntu 20.04.3 LTS (GNU/Linux 5.4.0-91-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+  System information as of Sun Dec 19 14:46:32 UTC 2021
+
+  System load:  0.01              Processes:               116
+  Usage of /:   5.4% of 38.71GB   Users logged in:         0
+  Memory usage: 19%               IPv4 address for enp0s3: 10.0.2.15
+  Swap usage:   0%                IPv4 address for enp0s8: 192.168.56.13
+
+
+1 update can be applied immediately.
+To see these additional updates run: apt list --upgradable
+
+
+The list of available updates is more than a week old.
+To check for new updates run: sudo apt update
+
+Last login: Sun Dec  5 20:45:20 2021 from 10.0.2.2
+vagrant@ubuntu:~$ 
+
+
+```
+
+- From controller to stream node client:
+
+```
+[vagrant@rhel8 ~]$ ssh -i stream.key 192.168.56.12
+Last login: Sun Dec 19 14:37:43 2021 from 192.168.56.11
+[vagrant@stream ~]$ 
+
+
+```
 
 ### Listing Ansible Documentation Modules  ###
 
