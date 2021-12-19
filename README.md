@@ -387,12 +387,15 @@ to distribute your ssh key to the `authorized_key` file.
 `$ ansible all -k -K -m authorized_key -a " user='tux' state='present' key='{{ lookup('file','/home/tux/.ssh/id_rsa_ansible.pub')  }}'   "`
 
 ## Create the user file for be added to sudoers.d folder in our managed hosts ##
+
 `$ echo " tux ALL=(root) NOPASSWD: ALL  > tux"`
 
 ### You can verify the syntax with : ###
+
 `sudo visudo -cf tux`
 
 ### Now, transfer this file to your managed nodes ### 
+
 `$ ansible all -b -K -m copy -a " src='tux' dest='/etc/sudoers.d/tux'  "`
 
 In this case, `all` means will be trasferred to all host in our inventory.
@@ -405,7 +408,18 @@ Finally `-a` is used for specify the other attributes enclosed by `""`.
 
 If you try to run the previous command without -K ( sudo privilege ), will work too because we have already create the tux user file in sudoers.d directory
 
+
+### **In case we have a Vagrant environment ddeployment** ###
+
+- We must copy vagrant keys to our controller node
+- Connect to nodes in order to test and collect node public keys
+- Create a user with sudo rights (wheel or sudo group) 
+- Key generation for vagrant in order to log in as "known" on remote nodes and distribution of this key to nodes.
+- Adjust config for using private key.
+-   
+
 ### Listing Ansible Documentation Modules  ###
+
 `$ ansible-doc -l`
 
 `$ ansible-doc user` -> For viewing about user module documentation
