@@ -440,6 +440,81 @@ If you try to run the previous command without -K ( sudo privilege ), will work 
 
 ```
 
+If we copy this node`s private key to our controller, we can use it to authenticate as a vagrant account on our stream system.
+
+- The following command for scp plugin installation.
+
+  `% vagrant plugin install vagrant-scp`
+
+- The following command allows copy node private key to the controller node.
+  
+  `vagrant scp <path_private_node_key>` <controller_name>:name.key
+
+- In this scenario we have 01 controller "rhel8"
+  - 01 ubuntu node client
+  - 01 stream node client
+
+Installation process:
+
+```
+user@host > vagrant plugin install vagrant-scp
+Installing the 'vagrant-scp' plugin. This can take a few minutes...
+Fetching: vagrant-libvirt-0.7.0.gem (100%)
+Fetching: vagrant-scp-0.5.9.gem (100%)
+Successfully uninstalled vagrant-libvirt-0.7.0
+Installed the plugin 'vagrant-scp (0.5.9)'!
+
+```
+Copying process:
+
+- First, will be listed all ssh node`s properties
+- Second, will be copied client node`s private keys to controller node.
+
+```
+user@host > vagrant ssh-config
+Host rhel8
+  HostName 127.0.0.1
+  User vagrant
+  Port 2222
+  UserKnownHostsFile /dev/null
+  StrictHostKeyChecking no
+  PasswordAuthentication no
+  IdentityFile /home/user/Ansible_Lab/.vagrant/machines/rhel8/virtualbox/private_key
+  IdentitiesOnly yes
+  LogLevel FATAL
+
+Host stream
+  HostName 127.0.0.1
+  User vagrant
+  Port 2200
+  UserKnownHostsFile /dev/null
+  StrictHostKeyChecking no
+  PasswordAuthentication no
+  IdentityFile /home/user/Ansible_Lab/.vagrant/machines/stream/virtualbox/private_key
+  IdentitiesOnly yes
+  LogLevel FATAL
+
+Host ubuntu
+  HostName 127.0.0.1
+  User vagrant
+  Port 2201
+  UserKnownHostsFile /dev/null
+  StrictHostKeyChecking no
+  PasswordAuthentication no
+  IdentityFile /home/user/Ansible_Lab/.vagrant/machines/ubuntu/virtualbox/private_key
+  IdentitiesOnly yes
+  LogLevel FATAL
+
+user@host Ansible_Lab> vagrant scp /home/user/Ansible_Lab/.vagrant/machines/stream/virtualbox/private_key rhel8:stream.key
+Warning: Permanently added '[127.0.0.1]:2222' (RSA) to the list of known hosts.
+private_key                                                                                                                                                 100% 1675     1.5MB/s   00:00    
+user@host Ansible_Lab> vagrant scp /home/user/Ansible_Lab/.vagrant/machines/ubuntu/virtualbox/private_key rhel8:ubuntu.key
+Warning: Permanently added '[127.0.0.1]:2222' (RSA) to the list of known hosts.
+private_key                                                                             
+
+```
+
+
 
 ### Listing Ansible Documentation Modules  ###
 
