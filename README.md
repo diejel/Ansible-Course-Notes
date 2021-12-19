@@ -192,10 +192,10 @@ you can install nmap for Centos based:
 - The following command will perform a search for a target port 22 within a 192.168.56.0/24 network.
 - P: ping scan, Pn: not perform a ping-scan, p: target port, n: network.
 
-`$ sudo namp -Pn -p22 -n 192.168.56.0/24`
+`$ sudo namp -Pn -p22 -n 192.168.56.0/24 --open`
 
 ```
-[vagrant@rhel8 ~]$ sudo nmap -Pn -p22 -n 192.168.56.0/24
+[vagrant@rhel8 ~]$ sudo nmap -Pn -p22 -n 192.168.56.0/24 --open
 Starting Nmap 7.70 ( https://nmap.org ) at 2021-12-19 10:02 UTC
 Nmap scan report for 192.168.56.1
 Host is up (0.00037s latency).
@@ -234,6 +234,14 @@ PORT   STATE SERVICE
 Nmap done: 256 IP addresses (5 hosts up) scanned in 12.66 seconds
 
 ```
+
+If we need to output in a greppabl format , add the `--oG` param, and a final `-` to export to sdout
+
+`sudo nmap -Pn -p22 -n 192.168.56.0/24 --open -oG - `
+
+We will use some _awk_ params for customizing our results
+
+` sudo nmap -Pn -p22 -n 192.168.56.0/24 --open -oG - | awk '/22\/open/ { print $2 }' `
 
 ### Query Inventory ###
 This is the way how you make request to query
