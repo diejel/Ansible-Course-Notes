@@ -591,16 +591,19 @@ Last login: Sun Dec 19 14:37:43 2021 from 192.168.56.11
 I you want to view 'Examples', just type `\EXAMPLE`, and inside the response it will redirect the Example section. 
 
 ### Playbooks ###
+
  - Single tab != single white-space
  - You can make vim as a valid yaml editor (~/.vimrc)
  
 ### Comapring Tab to Spaces ###
+
 - 8 spaces = 1 tab (With standard tab setting)
 - `:set list` , helps to view that 
     - 8 spaces in vim
     - `^I` 1 tab in vim with standard tab setting
 
 ### Sample of vimrc file ###
+
 - For yaml file we set 
   * Auto indent
   * Expand Tabs to spaces
@@ -610,11 +613,13 @@ I you want to view 'Examples', just type `\EXAMPLE`, and inside the response it 
 
 - First line of the vimrc file
     `autocmd FileType yaml setlocal ai et ts=2 sw=2 cuc cul`
+
 - Setting the vimrc file
     ```set bg=dark
        autocmd Filetype yaml setlocal ai et ts=2 sw=2 cuc cul
      ```
 ### Sample how to format .nanorc file ###
+
 - Open any editor you prefer and create in `$HOME/.nanorc` file.
 - This file must content:
 
@@ -626,10 +631,12 @@ set tabstospaces
 ```
 
 ### Sample of PLaybook ####
+
 - Contains a list of plays 
 - A play contians -> list of tasks
 - A task contains -> Ansible module with keys and values
 O playbook must be located in the same folder of inventory.
+
 ```
 ---
 
@@ -696,6 +703,7 @@ You can get all details of your machine by using the module "SETUP", you can do 
 - `$ ansible <host/group> -m setup`
 
 Where host, group or IP addressis valid field :) . Below is an example using the group _centos_ which contains 02 host with different IP address. I have also make a search using `grep` in order to filter network details about those hosts. 
+
 ```
 [user@host ~]$ ansible centos -m setup | grep -i '192.168.56.'
 192.168.56.3 | SUCCESS => {
@@ -725,6 +733,7 @@ Example: Using ad-hoc command and _setup_ module and attribute _filter_ for filt
 
 ## Creating Users ##
 - Look necessary documentation by doing `$ ansible-doc user`
+  
 ### Simplest User Creation ###
 ```
 ---
