@@ -329,7 +329,7 @@ key='{{ lookup('file','/home/tux/.ssh/id_rsa.pub') }}'  "
 ### Copy Sudoers Files ###
 To allow passwordless for not being asked everytime for sudo rights
 
-`$ echo " tux ALL=(root) NOPASSWD:ALL" > tux`
+`$ echo "tux ALL=(root) NOPASSWD:ALL" > tux`
  
 To verify if syntax is correct, do:
 
@@ -339,6 +339,15 @@ Copy process for all inventory hosts using `-b` to become sudo and elevate
 prvileges using `-K`, using copy module `-m` and specify the `-a` argument "..."...
 
 `$ ansible all -b -K -m copy -a "src=tux dest=/etc/sudoers.d/tux"`
+
+- In vagrant scenario:
+
+The controller will create a 'tux' user, append it to the sudoers file locally and remotely in their client nodes. Remember that the controller must use node ssh-key file for authenticate and proceed with the operation
+
+`user@host $ ansible --private-key ubuntu.key -u vagrant -m copy -a "src=tux dest=/etc/sudoers.d/"`
+
+In the command above, the controller use the _tux_ file which contains the info which grants tux user passwordless privileges `("tux ALL=(root) NOPASSWD:ALL")`.
+
 
 ### Help on Modules ###
 List module with `ansible-doc -l` command.
@@ -534,24 +543,7 @@ Warning: Permanently added 'A.B.C.D' (ECDSA) to the list of known hosts.
 [vagrant@rhel8 ~]$ ssh -i ubuntu.key 192.168.56.13
 Welcome to Ubuntu 20.04.3 LTS (GNU/Linux 5.4.0-91-generic x86_64)
 
- * Documentation:  https://help.ubuntu.com
- * Management:     https://landscape.canonical.com
- * Support:        https://ubuntu.com/advantage
-
-  System information as of Sun Dec 19 14:46:32 UTC 2021
-
-  System load:  0.01              Processes:               116
-  Usage of /:   5.4% of 38.71GB   Users logged in:         0
-  Memory usage: 19%               IPv4 address for enp0s3: 10.0.2.15
-  Swap usage:   0%                IPv4 address for enp0s8: 192.168.56.13
-
-
-1 update can be applied immediately.
-To see these additional updates run: apt list --upgradable
-
-
-The list of available updates is more than a week old.
-To check for new updates run: sudo apt update
+ 
 
 Last login: Sun Dec  5 20:45:20 2021 from 10.0.2.2
 vagrant@ubuntu:~$ 
@@ -583,10 +575,9 @@ Last login: Sun Dec 19 14:37:43 2021 from 192.168.56.11
 
 ```
 
-
 ### Creating User Account ###
 
-First, will be created a user account in ad0hoc style
+First, will be created a user account in ad-hoc style
 
 ```
 [vagrant@rhel8 ~]$ ansible --private-key ubuntu.key -u vagrant -m user -a "name=tux" ubuntu
@@ -605,6 +596,10 @@ First, will be created a user account in ad0hoc style
     "system": false,
     "uid": 1002
 }
+```
+- If you run again the command above, you will realize there is no new changes.
+  
+```
 [vagrant@rhel8 ~]$ ansible --private-key ubuntu.key -u vagrant -m user -a "name=tux" ubuntu
 192.168.56.13 | SUCCESS => {
     "ansible_facts": {
