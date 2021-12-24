@@ -299,6 +299,8 @@ Some definitions of arguments:
 
 `-k` -> to prompt for ssh password
 
+`-K` -> to prompt for SUDO password
+
 `-b` -> to elevate privileges
 
 ### Basic Configuration ###
@@ -321,9 +323,11 @@ this is a module that look for a python interpreter active in the remote hosts
 Distribution of the ssh key in all nodes where is created the same user tux
 , add the ssh key in authorized_keys file
  
-```$ ansible all -k -K -m authorized_key \
+```
+$ ansible all -k -K -m authorized_key \
 -a " user='tux' state='present' \ 
 key='{{ lookup('file','/home/tux/.ssh/id_rsa.pub') }}'  "
+
 ```
 
 ### Copy Sudoers Files ###
