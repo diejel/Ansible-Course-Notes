@@ -569,7 +569,7 @@ Last login: Sun Dec 19 14:37:43 2021 from 192.168.56.11
 
 ```
 
-- Now, will be performed a " _ping_ " test. Remember that this ping test is not an ICMP test. this is a test to know if the client node has a python interpreter. In the following example will be specified a username _vagrant_ , the module _ping_ , the private key and the target client`s hostname.
+- Now, will be performed a " _ping_ " test. Remember that this ping test is not an ICMP test. this is a test to know if the client node has a python interpreter. In the following example will be specified a username _vagrant_ , the module _ping_ , the private key and the target client`s hostname. In his test, basically the controller perform and ssh connection with the client node "ubuntu", the controller connects directly since is not necessary password authentication due to it is ssh-key based. Once, the controller has connected to the client node, it performs a query looking for a python interpreter.
 
 ```
 [vagrant@rhel8 ~]$ ansible -m ping -u vagrant --private-key ubuntu.key ubuntu
