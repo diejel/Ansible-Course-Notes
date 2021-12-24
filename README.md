@@ -581,6 +581,46 @@ Last login: Sun Dec 19 14:37:43 2021 from 192.168.56.11
     "ping": "pong"
 }
 
+
+
+### Creating User Account ###
+
+First, will be created a user account in ad0hoc style
+
+```
+[vagrant@rhel8 ~]$ ansible --private-key ubuntu.key -u vagrant -m user -a "name=tux" ubuntu
+192.168.56.13 | CHANGED => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python3"
+    },
+    "changed": true,
+    "comment": "",
+    "create_home": true,
+    "group": 1002,
+    "home": "/home/tux",
+    "name": "tux",
+    "shell": "/bin/sh",
+    "state": "present",
+    "system": false,
+    "uid": 1002
+}
+[vagrant@rhel8 ~]$ ansible --private-key ubuntu.key -u vagrant -m user -a "name=tux" ubuntu
+192.168.56.13 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python3"
+    },
+    "append": false,
+    "changed": false,
+    "comment": "",
+    "group": 1002,
+    "home": "/home/tux",
+    "move_home": false,
+    "name": "tux",
+    "shell": "/bin/sh",
+    "state": "present",
+    "uid": 1002
+}
+
 ```
 
 ### Listing Ansible Documentation Modules  ###
