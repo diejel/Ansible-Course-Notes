@@ -4,7 +4,7 @@
 [stream]
 192.168.56.12
 
-[debian]
+[ubuntu]
 192.168.56.13
 
 [redhat:children]

@@ -259,6 +259,7 @@ Is a better practice to separate hosts and groups in differnet
 folders for example "`host_vars`, `group_vars`" groups.
 
 `$ mkdir ./host_vars`
+
 `$ echo "ansible_connection: local" > host_vars/192.168.56.2`
 
 ### Ad-hoc commands ###
@@ -346,7 +347,7 @@ prvileges using `-K`, using copy module `-m` and specify the `-a` argument "..."
 
 - In vagrant scenario:
 
-The controller will create a 'tux' user, append it to the sudoers file locally and remotely in their client nodes. Remember that the controller must use node ssh-key file for authenticate and proceed with the operation
+The controller will create a 'tux' user, append it to the sudoers file locally and remotely in their client nodes. Remember that the controller must use node ssh-key file for authenticate and proceed with the operation. Those .key are files that will be generated with scp utility in a vagrant environment
 
 `user@host $ ansible --private-key ubuntu.key -u vagrant -m copy -a "src=tux dest=/etc/sudoers.d/"`
 
