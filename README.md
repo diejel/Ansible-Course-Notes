@@ -347,83 +347,7 @@ prvileges using `-K`, using copy module `-m` and specify the `-a` argument "..."
 
 - In vagrant scenario:
 
-The controller will create a 'tux' user, append it to the sudoers file locally and remotely in their client nodes. Remember that the controller must use node ssh-key file for authenticate and proceed with the operation. Those .key are files that will be generated with scp utility in a vagrant environment
-
-`user@host $ ansible --private-key ubuntu.key -u vagrant -m copy -a "src=tux dest=/etc/sudoers.d/"`
-
-In the command above, the controller use the _tux_ file which contains the info which grants tux user passwordless privileges `("tux ALL=(root) NOPASSWD:ALL")`.
-
-
-### Help on Modules ###
-List module with `ansible-doc -l` command.
-
-`$ ansible-doc -l`
-
-`$ ansible-doc -l | grep ping`
-
-`$ ansible-doc user`
-
-## Creating Users ##
-With user module ,is nedded to specify at least 01 user name as argument.
-Must be run as root including the `-b` option (to become user = root)
-You can delete the user with : `state=absent`
-
-`$ ansible  192.168.56.2 -b -m user -a "name=fred"`
-
-To delete a user:
-`$ ansible 192.168.56.2 -b -m user -a "name=fred state=absent"`
-
-`$ ansible 192.168.56.2 -b -m user -a "name=fred state=absent remove=true"`
-
-
-## Managing SSH Keys using Ansible ##
-You must run the following code to add the public keys
-of your remote hosts to your `known_hosts` file
-
-`$ for h in 192.168.56.{2..4}; do ssh-keyscan $h >> ~/.ssh/known_hosts ; done`
-
-Now is needed generate a SSH Key and distribute to our clients
-in order we are not asked for entering password at everiy ssh connection.
-
-`$ssh-keygen` (leave all by default)
-
-After that, now is needed to verify if nodes in your 
-inventory has active a python interpreter using the ping module
-
-`$ ansible all -k -K -m ping`
-
-- Remember that you dont have to have any file indicating the ip
-and `ansible_connection=local`
-
-After any hosts responds to ping module with success, you need
-to distribute your ssh key to the `authorized_key` file.
-
-`$ ansible all -k -K -m authorized_key -a " user='tux' state='present' key='{{ lookup('file','/home/tux/.ssh/id_rsa_ansible.pub')  }}'   "`
-
-## Create the user file for be added to sudoers.d folder in our managed hosts ##
-
-`$ echo " tux ALL=(root) NOPASSWD: ALL  > tux"`
-
-### You can verify the syntax with : ###
-
-`sudo visudo -cf tux`
-
-### Now, transfer this file to your managed nodes ### 
-
-`$ ansible all -b -K -m copy -a " src='tux' dest='/etc/sudoers.d/tux'  "`
-
-In this case, `all` means will be trasferred to all host in our inventory.
-`-b` is used because will 'become' sudo, due to `-K` specified.
-
-There is no needed anymore `-k` because we have already trasnferred our ssh public key to `authorized_keys` and prompt ssh password is not nedded.
-`-m` is used to specify the `copy` module.
-
-Finally `-a` is used for specify the other attributes enclosed by `""`.
-
-If you try to run the previous command without -K ( sudo privilege ), will work too because we have already create the tux user file in sudoers.d directory
-
-
-  ### **In case we have a Vagrant environment ddeployment** ###
+  ### **In case we have a Vagrant environment deployment** ###
 
   - We must copy vagrant keys to our controller node
   - Connect to nodes in order to test and collect node public keys
@@ -579,6 +503,84 @@ Last login: Sun Dec 19 14:37:43 2021 from 192.168.56.11
 }
 
 ```
+
+The controller will create a 'tux' user, append it to the sudoers file locally and remotely in their client nodes. Remember that the controller must use node ssh-key file for authenticate and proceed with the operation. Those .key are files that will be generated with scp utility in a vagrant environment
+
+`user@host $ ansible --private-key ubuntu.key -u vagrant -m copy -a "src=tux dest=/etc/sudoers.d/"`
+
+In the command above, the controller use the _tux_ file which contains the info which grants tux user passwordless privileges `("tux ALL=(root) NOPASSWD:ALL")`.
+
+
+### Help on Modules ###
+List module with `ansible-doc -l` command.
+
+`$ ansible-doc -l`
+
+`$ ansible-doc -l | grep ping`
+
+`$ ansible-doc user`
+
+## Creating Users ##
+With user module ,is nedded to specify at least 01 user name as argument.
+Must be run as root including the `-b` option (to become user = root)
+You can delete the user with : `state=absent`
+
+`$ ansible  192.168.56.2 -b -m user -a "name=fred"`
+
+To delete a user:
+`$ ansible 192.168.56.2 -b -m user -a "name=fred state=absent"`
+
+`$ ansible 192.168.56.2 -b -m user -a "name=fred state=absent remove=true"`
+
+
+## Managing SSH Keys using Ansible ##
+You must run the following code to add the public keys
+of your remote hosts to your `known_hosts` file
+
+`$ for h in 192.168.56.{2..4}; do ssh-keyscan $h >> ~/.ssh/known_hosts ; done`
+
+Now is needed generate a SSH Key and distribute to our clients
+in order we are not asked for entering password at everiy ssh connection.
+
+`$ssh-keygen` (leave all by default)
+
+After that, now is needed to verify if nodes in your 
+inventory has active a python interpreter using the ping module
+
+`$ ansible all -k -K -m ping`
+
+- Remember that you dont have to have any file indicating the ip
+and `ansible_connection=local`
+
+After any hosts responds to ping module with success, you need
+to distribute your ssh key to the `authorized_key` file.
+
+`$ ansible all -k -K -m authorized_key -a " user='tux' state='present' key='{{ lookup('file','/home/tux/.ssh/id_rsa_ansible.pub')  }}'   "`
+
+## Create the user file for be added to sudoers.d folder in our managed hosts ##
+
+`$ echo " tux ALL=(root) NOPASSWD: ALL  > tux"`
+
+### You can verify the syntax with : ###
+
+`sudo visudo -cf tux`
+
+### Now, transfer this file to your managed nodes ### 
+
+`$ ansible all -b -K -m copy -a " src='tux' dest='/etc/sudoers.d/tux'  "`
+
+In this case, `all` means will be trasferred to all host in our inventory.
+`-b` is used because will 'become' sudo, due to `-K` specified.
+
+There is no needed anymore `-k` because we have already trasnferred our ssh public key to `authorized_keys` and prompt ssh password is not nedded.
+`-m` is used to specify the `copy` module.
+
+Finally `-a` is used for specify the other attributes enclosed by `""`.
+
+If you try to run the previous command without -K ( sudo privilege ), will work too because we have already create the tux user file in sudoers.d directory
+
+
+
 
 ### Creating User Account ###
 
