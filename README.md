@@ -359,13 +359,13 @@ prvileges using `-K`, using copy module `-m` and specify the `-a` argument "..."
 
 By default, ssh password authentication is disabled. Each time the system boots new keys are generated. Suppose that our scenario has 02 client nodes,  will be setup for those nodes so they could copy and update its keys into the controller.
 
-SSH configuration in certain client node , can be verified as follows
+SSH configuration in the vagrant server node can be verified as follows
 
-`[user@hostsystem]$ vagrant ssh-config <node_name>`
+`[user@vagrant-server]$ vagrant ssh-config <node_name>`
 
 
   ``` 
-  user@hostsystem: vagrant ssh-config ubuntu
+  [user@vagrant-server]$ vagrant ssh-config ubuntu
   Host ubuntu
   HostName 127.0.0.1
   User vagrant
@@ -379,15 +379,15 @@ SSH configuration in certain client node , can be verified as follows
 
 ```
 
-If we copy this node`s private key to our controller, we can use it to authenticate as a vagrant account on our stream system.
+If we copy this node`s private key to our controller(rhel8), we can use it to authenticate as a vagrant account on our stream or ubuntu system.
 
 - The following command for scp plugin installation.
 
-`vagrant plugin install vagrant-scp`
+`[user@vagrant-server]$ vagrant plugin install vagrant-scp`
 
 - The following command allows copy node private key to the controller node.
   
-`vagrant scp <path_private_node_key> <controller_name>:name.key`
+`[user@vagrant-server]$ vagrant scp <path_private_node_key> <controller_name>:name.key`
 
 - In this scenario we have 01 controller "rhel8"
 
@@ -460,6 +460,31 @@ user@host Ansible_Lab> vagrant scp /home/user/Ansible_Lab/.vagrant/machines/ubun
 Warning: Permanently added '[127.0.0.1]:2222' (RSA) to the list of known hosts.
 private_key                                                                             
 
+
+```
+
+Verification process
+
+---
+Is performed a listing command for view the private keys on controller.
+
+```
+[vagrant@rhel8 ~]$ ls -alsh
+total 32K
+   0 drwx------. 6 vagrant vagrant  227 Feb  6 16:55 .
+   0 drwxr-xr-x. 3 root    root      21 Feb  2 01:22 ..
+   0 drwx------. 4 vagrant vagrant   27 Feb  6 02:56 .ansible
+4.0K -rw-------. 1 vagrant vagrant   50 Feb  6 02:02 .bash_history
+4.0K -rw-r--r--. 1 vagrant vagrant   18 Jul 26  2021 .bash_logout
+4.0K -rw-r--r--. 1 vagrant vagrant  141 Jul 26  2021 .bash_profile
+4.0K -rw-r--r--. 1 vagrant vagrant  376 Jul 26  2021 .bashrc
+4.0K -rw-rw-r--. 1 vagrant vagrant   55 Feb  6 02:42 .gitconfig
+   0 drwx------. 2 vagrant vagrant   80 Feb  6 01:54 .ssh
+   0 drwxrwxr-x. 5 vagrant vagrant  208 Feb  6 02:01 .vscode-server
+4.0K -rw-rw-r--. 1 vagrant vagrant  183 Feb  6 02:01 .wget-hsts
+   0 drwxrwxr-x. 3 vagrant vagrant   34 Feb  6 01:54 lab_ansible_pl
+4.0K -rw-------. 1 vagrant vagrant 1.7K Feb  6 16:55 stream.key
+4.0K -rw-------. 1 vagrant vagrant 1.7K Feb  6 16:54 ubuntu.key
 
 ```
 
