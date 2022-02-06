@@ -347,21 +347,22 @@ prvileges using `-K`, using copy module `-m` and specify the `-a` argument "..."
 
 - In vagrant scenario:
 
-  ### **In case we have a Vagrant environment deployment** ###
+### **In case we have a Vagrant environment deployment** ###
 
-  - We must copy vagrant keys to our controller node
-  - Connect to nodes in order to test and collect node public keys
-  - Create a user with sudo rights (wheel or sudo group) 
-  - Key generation for vagrant in order to log in as "known" on remote nodes and distribution of this key to nodes.
-  - Adjust config for using private key.
+- We must copy vagrant keys to our controller node
+- Connect to nodes in order to test and collect node public keys
+- Create a user with sudo rights (wheel or sudo group) 
+- Key generation for vagrant in order to log in as "known" on remote nodes and distribution of this key to nodes.
+- Adjust config for using private key.
   
-  ### Vagrant SSH Keys ###
+### Vagrant SSH Keys ###
 
-  By default, ssh password authentication is disabled. Each time the system boots new keys are generated. Suppose that our scenario has 02 client nodes,  will be setup for those nodes so they could copy and update its keys into the controller.
+By default, ssh password authentication is disabled. Each time the system boots new keys are generated. Suppose that our scenario has 02 client nodes,  will be setup for those nodes so they could copy and update its keys into the controller.
 
-  SSH configuration in certain client node , can be verified as follows
+SSH configuration in certain client node , can be verified as follows
 
-  `[user@hostsystem]$ vagrant ssh-config <node_name>`
+`[user@hostsystem]$ vagrant ssh-config <node_name>`
+
 
   ``` 
   user@hostsystem: vagrant ssh-config ubuntu
@@ -386,7 +387,7 @@ If we copy this node`s private key to our controller, we can use it to authentic
 
 - The following command allows copy node private key to the controller node.
   
-`vagrant scp <path_private_node_key>` <controller_name>:name.key
+`vagrant scp <path_private_node_key> <controller_name>:name.key`
 
 - In this scenario we have 01 controller "rhel8"
 
@@ -449,6 +450,9 @@ Host ubuntu
   IdentitiesOnly yes
   LogLevel FATAL
 
+```
+
+```
 user@host Ansible_Lab> vagrant scp /home/user/Ansible_Lab/.vagrant/machines/stream/virtualbox/private_key rhel8:stream.key
 Warning: Permanently added '[127.0.0.1]:2222' (RSA) to the list of known hosts.
 private_key                                                                                                                                                 100% 1675     1.5MB/s   00:00    
@@ -465,16 +469,16 @@ Now, from the controller will attempt to connect to our node client`s using the 
 
 Be aware that by the first time, will appears a message like below and we have to add by typing "yes":
 
+```
 
 The authenticity of host 'A.B.C.D (A.B.C.D)' can't be established.
 ECDSA key fingerprint is SHA256:LBMCbc20y4j6I9XVddhCOk5m4hoyBaPJVBiCbcRz9X8.
 Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
 Warning: Permanently added 'A.B.C.D' (ECDSA) to the list of known hosts.
 
-
 ```
 
-- From controller to ubuntu node:
+- From controller to ubuntu node client:
 
 ```
 
@@ -488,7 +492,6 @@ vagrant@ubuntu:~$
 
 
 ```
-
 
 - From controller to stream node client:
 
