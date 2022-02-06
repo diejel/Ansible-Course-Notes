@@ -147,7 +147,7 @@ DEFAULT_HOST_LIST(/home/vagrant/.ansible.cfg) = ['/home/vagrant/inventory']
 DEFAULT_REMOTE_USER(/home/vagrant/.ansible.cfg) = tux
 
 ```
-## Sample of configuratio file ##
+## Sample of configuration file ##
 ```
 [defaults]
 inventory=inventory ; set inventory file in the same working directory
@@ -248,11 +248,11 @@ This is the way how you make request to query
 for listing hosts in your inventory file
 
 * If you ommit `-i` , you will look up in the inventory
-file configured
+file configured and if you have another inventory file Ex: "inventory_new", you must include `-i`
 
-`$ ansible -i hosts --lists-hosts ubuntu`
+`$ ansible -i inventory_new --lists-hosts ubuntu`
 
-`$ ansible -i hosts --list-hosts webservers`
+`$ ansible  --list-hosts webservers`
 
 ### Separate Hosts and Variables ###
 Is a better practice to separate hosts and groups in differnet
