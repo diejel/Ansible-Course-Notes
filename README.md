@@ -357,7 +357,7 @@ prvileges using `-K`, using copy module `-m` and specify the `-a` argument "..."
   
   ### Vagrant SSH Keys ###
 
-  By default, ssh password authentication is disabled. Each time the system boots new keys are generated. Suppose that our snecario has 02 client nodes, we will setup for those nodes copy their update its keys in the controller.
+  By default, ssh password authentication is disabled. Each time the system boots new keys are generated. Suppose that our scenario has 02 client nodes,  will be setup for those nodes so they could copy and update its keys into the controller.
 
   SSH configuration in certain client node , can be verified as follows
 
@@ -382,19 +382,22 @@ If we copy this node`s private key to our controller, we can use it to authentic
 
 - The following command for scp plugin installation.
 
-  `% vagrant plugin install vagrant-scp`
+`vagrant plugin install vagrant-scp`
 
 - The following command allows copy node private key to the controller node.
   
-  `vagrant scp <path_private_node_key>` <controller_name>:name.key
+`vagrant scp <path_private_node_key>` <controller_name>:name.key
 
 - In this scenario we have 01 controller "rhel8"
+
   - 01 ubuntu node client
   - 01 stream node client
 
 Installation process:
 
+
 ```
+
 user@host > vagrant plugin install vagrant-scp
 Installing the 'vagrant-scp' plugin. This can take a few minutes...
 Fetching: vagrant-libvirt-0.7.0.gem (100%)
@@ -403,12 +406,15 @@ Successfully uninstalled vagrant-libvirt-0.7.0
 Installed the plugin 'vagrant-scp (0.5.9)'!
 
 ```
+
 Copying process:
 
 - First, will be listed all ssh node`s properties
 - Second, will be copied client node`s private keys to controller node.
 
+
 ```
+
 user@host > vagrant ssh-config
 Host rhel8
   HostName 127.0.0.1
@@ -450,6 +456,7 @@ user@host Ansible_Lab> vagrant scp /home/user/Ansible_Lab/.vagrant/machines/ubun
 Warning: Permanently added '[127.0.0.1]:2222' (RSA) to the list of known hosts.
 private_key                                                                             
 
+
 ```
 
 Now, from the controller will attempt to connect to our node client`s using the private key.
@@ -458,17 +465,19 @@ Now, from the controller will attempt to connect to our node client`s using the 
 
 Be aware that by the first time, will appears a message like below and we have to add by typing "yes":
 
-```
+
 The authenticity of host 'A.B.C.D (A.B.C.D)' can't be established.
 ECDSA key fingerprint is SHA256:LBMCbc20y4j6I9XVddhCOk5m4hoyBaPJVBiCbcRz9X8.
 Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
 Warning: Permanently added 'A.B.C.D' (ECDSA) to the list of known hosts.
+
 
 ```
 
 - From controller to ubuntu node:
 
 ```
+
 [vagrant@rhel8 ~]$ ssh -i ubuntu.key 192.168.56.13
 Welcome to Ubuntu 20.04.3 LTS (GNU/Linux 5.4.0-91-generic x86_64)
 
@@ -480,9 +489,12 @@ vagrant@ubuntu:~$
 
 ```
 
+
 - From controller to stream node client:
 
+
 ```
+
 [vagrant@rhel8 ~]$ ssh -i stream.key 192.168.56.12
 Last login: Sun Dec 19 14:37:43 2021 from 192.168.56.11
 [vagrant@stream ~]$ 
@@ -492,7 +504,9 @@ Last login: Sun Dec 19 14:37:43 2021 from 192.168.56.11
 
 - Now, will be performed a " _ping_ " test. Remember that this ping test is not an ICMP test. this is a test to know if the client node has a python interpreter. In the following example will be specified a username _vagrant_ , the module _ping_ , the private key and the target client`s hostname. In his test, basically the controller perform and ssh connection with the client node "ubuntu", the controller connects directly since is not necessary password authentication due to it is ssh-key based. Once, the controller has connected to the client node, it performs a query looking for a python interpreter.
 
+
 ```
+
 [vagrant@rhel8 ~]$ ansible -m ping -u vagrant --private-key ubuntu.key ubuntu
 192.168.56.13 | SUCCESS => {
     "ansible_facts": {
@@ -501,6 +515,7 @@ Last login: Sun Dec 19 14:37:43 2021 from 192.168.56.11
     "changed": false,
     "ping": "pong"
 }
+
 
 ```
 
@@ -512,6 +527,7 @@ In the command above, the controller use the _tux_ file which contains the info 
 
 
 ### Help on Modules ###
+
 List module with `ansible-doc -l` command.
 
 `$ ansible-doc -l`
@@ -521,6 +537,7 @@ List module with `ansible-doc -l` command.
 `$ ansible-doc user`
 
 ## Creating Users ##
+
 With user module ,is nedded to specify at least 01 user name as argument.
 Must be run as root including the `-b` option (to become user = root)
 You can delete the user with : `state=absent`
@@ -528,6 +545,7 @@ You can delete the user with : `state=absent`
 `$ ansible  192.168.56.2 -b -m user -a "name=fred"`
 
 To delete a user:
+
 `$ ansible 192.168.56.2 -b -m user -a "name=fred state=absent"`
 
 `$ ansible 192.168.56.2 -b -m user -a "name=fred state=absent remove=true"`
@@ -570,9 +588,11 @@ to distribute your ssh key to the `authorized_key` file.
 `$ ansible all -b -K -m copy -a " src='tux' dest='/etc/sudoers.d/tux'  "`
 
 In this case, `all` means will be trasferred to all host in our inventory.
+
 `-b` is used because will 'become' sudo, due to `-K` specified.
 
 There is no needed anymore `-k` because we have already trasnferred our ssh public key to `authorized_keys` and prompt ssh password is not nedded.
+
 `-m` is used to specify the `copy` module.
 
 Finally `-a` is used for specify the other attributes enclosed by `""`.
@@ -580,13 +600,13 @@ Finally `-a` is used for specify the other attributes enclosed by `""`.
 If you try to run the previous command without -K ( sudo privilege ), will work too because we have already create the tux user file in sudoers.d directory
 
 
-
-
 ### Creating User Account ###
 
 First, will be created a user account in ad-hoc style
 
+
 ```
+
 [vagrant@rhel8 ~]$ ansible --private-key ubuntu.key -u vagrant -m user -a "name=tux" ubuntu
 192.168.56.13 | CHANGED => {
     "ansible_facts": {
@@ -603,10 +623,14 @@ First, will be created a user account in ad-hoc style
     "system": false,
     "uid": 1002
 }
+
 ```
+
 - If you run again the command above, you will realize there is no new changes.
   
+
 ```
+
 [vagrant@rhel8 ~]$ ansible --private-key ubuntu.key -u vagrant -m user -a "name=tux" ubuntu
 192.168.56.13 | SUCCESS => {
     "ansible_facts": {
@@ -623,6 +647,7 @@ First, will be created a user account in ad-hoc style
     "state": "present",
     "uid": 1002
 }
+
 
 ```
 
@@ -658,9 +683,12 @@ I you want to view 'Examples', just type `\EXAMPLE`, and inside the response it 
     `autocmd FileType yaml setlocal ai et ts=2 sw=2 cuc cul`
 
 - Setting the vimrc file
-    ```set bg=dark
-       autocmd Filetype yaml setlocal ai et ts=2 sw=2 cuc cul
-     ```
+    
+    ```
+      set bg=dark
+      autocmd Filetype yaml setlocal ai et ts=2 sw=2 cuc cul
+    
+    ```
 ### Sample how to format .nanorc file ###
 
 - Open any editor you prefer and create in `$HOME/.nanorc` file.
@@ -691,6 +719,7 @@ O playbook must be located in the same folder of inventory.
          msg: "here we are"
 
 ```
+
 - Optionally you can check the syntax by doing : ` $ ansible-playbook sample.yml --syntax-check `
 - Just execute: ` $ ansible-playbook sample.yml`
 
@@ -708,22 +737,28 @@ O playbook must be located in the same folder of inventory.
 
 ```
 
-
 ## Playbook Summary ##
 
 - Edit the vimrc file
+
    `autocmd FileType yaml setlocal ai et ts=2 sw=2 cuc cul`
+
 - name of Playbook, and name of task are optional, but is extremely recommended for tshoot
 - Every .yml file starts with 03 dash lines
 - hosts field must be as follows (IP, group name)
+
       `hosts: 192.168.1.50`
+
       `hosts: group-centos`
+
 - Remember disable gather_facts in your ansible script.
+
         `gather_facts: false`
 
 ### Understanding why use/not use "gather facts" ###
 
 Gather facts option is useful when you need to acquire information from the host. But maybe, sometimes is not necessary for a particular play, in that way is better not use in order to accomplish the task faster.
+
  - Here we have an example of playbook using facts.
 
 ```
@@ -741,13 +776,16 @@ Gather facts option is useful when you need to acquire information from the host
                    msg: "This host is {{ ansible_hostname }}"
 
 ```
+
 You can get all details of your machine by using the module "SETUP", you can do the following :
 
 - `$ ansible <host/group> -m setup`
 
 Where host, group or IP addressis valid field :) . Below is an example using the group _centos_ which contains 02 host with different IP address. I have also make a search using `grep` in order to filter network details about those hosts. 
 
+
 ```
+
 [user@host ~]$ ansible centos -m setup | grep -i '192.168.56.'
 192.168.56.3 | SUCCESS => {
             "192.168.56.3"
@@ -760,9 +798,12 @@ Where host, group or IP addressis valid field :) . Below is an example using the
                 "broadcast": "192.168.56.255",
                 "network": "192.168.56.0"
 ```
+
 Example: Using ad-hoc command and _setup_ module and attribute _filter_ for filtering results.
 
+
 ```
+
   [vagrant@rhel8 ~]$ ansible_connection=local ansible localhost -m setup \
   > -a "filter=ansible_os_family"
   localhost | SUCCESS => {
@@ -775,9 +816,11 @@ Example: Using ad-hoc command and _setup_ module and attribute _filter_ for filt
 ```
 
 ## Creating Users ##
+
 - Look necessary documentation by doing `$ ansible-doc user`
   
 ### Simplest User Creation ###
+
 ```
 ---
 
@@ -829,6 +872,7 @@ Example: Using ad-hoc command and _setup_ module and attribute _filter_ for filt
 ```
 
 user.yml  [file]
+
 ```
 --- 
 
@@ -842,9 +886,11 @@ user.yml  [file]
 
 ```
 To create by using ad-hoc commands:
+
 `$ ansible-playbook -e user_name=suki user.yml`
  
 ### Create User (Example) [create_user_jodi.yml] ###
+
 ```
 ---
 - name: Create user
@@ -858,6 +904,7 @@ To create by using ad-hoc commands:
 ```
 
 And is executed as follows:
+
 `$ ansible-playbook create_user_jodi.yml `
 
 If you prefer check syntax previously, you can type: 
@@ -873,6 +920,7 @@ To corroborate that the user `jodi` was added successfully, you can type:
 The output:
 
 ```
+
 192.168.56.2 | CHANGED | rc=0 >>
 jodi:x:1002:1002::/home/jodi:/bin/bash
 192.168.56.4 | CHANGED | rc=0 >>
@@ -881,6 +929,7 @@ jodi:x:1002:1002::/home/jodi:/bin/sh
 jodi:x:1002:1002::/home/jodi:/bin/bash
 
 ```
+
 ### Delete User (Example) [delete_user_jodi.yml] ###
 
 ```
@@ -957,10 +1006,11 @@ jodi:x:1002:1002::/home/jodi:/bin/bash
 
 `$ ansible-playbook -e "user_name=jaiminho"  create_user_variable_substitution.yml `
 
-%% User Passwords %%
+## User Passwords ##
 Paswords must be encrypted, this can be done using ansible functions or using python script.
 
 ### Example of script in Python3 ###
+
 ```
 #!/usr/bin/python3
 import sys, crypt
@@ -969,6 +1019,7 @@ if len(sys.argv)==1 : sys.exit("You must specify a new password")
 print(crypt.crypt(sys.argv[1], crypt.mksalt(crypt.METHOD_SHA512)))
 
 ```
+
 The example above, will be used after. Now will be explained in case we use a native function of ansible for generating encrypted passwords.
 
 ```
@@ -990,6 +1041,7 @@ The example above, will be used after. Now will be explained in case we use a na
       state: 'absent'
       remove: true
     when: user_create == 'no'
+
 ```
 
 ## Create Ansible User ##
@@ -1013,6 +1065,7 @@ At creating the user named as "devops" we can add paswordless access for the use
         dest: /etc/sudoers.d/devops
         content: 'devops ALL=(ALL) NOPASSWD: ALL'
 	validate: /usr/sbin/visudo -cf %s
+
 ```
 
 From the code above, we have used the _copy_ module, and was specified the destination path of the new file called `devops` inside
@@ -1031,6 +1084,7 @@ We will use that user for copy its SSH public key to the remote _devops_ account
 	state: present
 	manage_dir: true
 	key: "{{ lookup{'file','/home/tux/.ssh/id_rsa.pub'}  }}"
+
 ```
 
 ### Creating the devops account ###
@@ -1127,11 +1181,13 @@ This is the output:
 ```
 
 For verifying the account creation, you can perform this:
+
 ```
 [user@host]$ getent passwd ansible
 ansible:x:1005:1005::/home/ansible:/bin/bash
 [user@host]$ sudo getent shadow ansible
 ansible:$6$aqBxnzLdlawurBaM$IXSz4f5tc3QF08C6i98IVHpZpcl5fvQkSYOCZVaqDbKkXGqS2QlmTH502vnZKHJvWXNEiMPozLv2JTWD1AoKf1:18854:0:99999:7:::
+
 ```
 ### Allowing Passwordless Sudo Access for `ansible` user ###
 - Create one file that contains the following fields
@@ -1154,7 +1210,7 @@ ansible:$6$aqBxnzLdlawurBaM$IXSz4f5tc3QF08C6i98IVHpZpcl5fvQkSYOCZVaqDbKkXGqS2Qlm
 
 
 ## Install Multiple Package with Playbook  ##
-A biefly playbook [install-multi-pkgs.yml] for you understand how to install package in your inventory hosts.
+A briefly playbook [install-multi-pkgs.yml] for you understand how to install package in your inventory hosts.
 
 ```
 ---
@@ -1214,7 +1270,6 @@ PLAY RECAP *********************************************************************
 192.168.56.4               : ok=3    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
 
 ```
-
 ## Working with Variables and Facts ##
 
 For example CentOS and Ubuntu use different package management, `yum` for CentOS and `apt` for Ubuntu.
@@ -1245,6 +1300,7 @@ _Ubuntu_ and _CentOS_ we can use 02 plays.
    - name: install apache
      apt:
       name: apache2
+
 ``` 
 
 ### Using Facts ###
@@ -1263,7 +1319,6 @@ a conditional statement. In that way, you can use just only one play with multip
      when: ansible_distribution == 'CentOS'
 
 ```
-
 Another example:
 
 ```
@@ -1433,8 +1488,6 @@ Create the file `apache-using-logic.yml`:
 ```
 
 To execute, `$ ansible-playbook apache-using-logic.yml` .
-
-
 
 ### Installing Apache ( Variables) ###
 
