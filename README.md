@@ -91,7 +91,7 @@ Debian:
 
 `sudo apt update`
 
-`sudo apt install -y ansible sshpass` 
+`sudo apt install -y ansible sshpass`
 
   - Ubuntu (20.04)
     - `$ sudo apt-add-repository  --yes --update ppa:ansible/ansible`
