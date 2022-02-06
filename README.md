@@ -1,4 +1,78 @@
-### Ansible-Installation ###
+# 1. Ansible Notes
+
+- [1. Ansible Notes](#1-ansible-notes)
+  - [1.1. Menu](#11-menu)
+    - [1.1.1. Ansible-Installation](#111-ansible-installation)
+    - [1.1.2. Configuration Hierarchy](#112-configuration-hierarchy)
+    - [1.1.3. **Securing ANSIBLE_CONFIG Variable**](#113-securing-ansible_config-variable)
+    - [1.1.4. Show current file contents](#114-show-current-file-contents)
+    - [1.1.5. Show all configuration](#115-show-all-configuration)
+    - [1.1.6. Show current settings](#116-show-current-settings)
+    - [1.1.7. Show only non-default settings](#117-show-only-non-default-settings)
+  - [1.2. Sample of configuration file](#12-sample-of-configuration-file)
+  - [1.3. Ansible Inventory](#13-ansible-inventory)
+    - [1.3.1. Example of an inventory file](#131-example-of-an-inventory-file)
+    - [1.3.2. Perform a quickly search and creae an Inventory](#132-perform-a-quickly-search-and-creae-an-inventory)
+    - [1.3.3. Query Inventory](#133-query-inventory)
+    - [1.3.4. Separate Hosts and Variables](#134-separate-hosts-and-variables)
+    - [1.3.5. Ad-hoc commands](#135-ad-hoc-commands)
+    - [1.3.6. Basic Configuration](#136-basic-configuration)
+    - [1.3.7. Ping Hosts](#137-ping-hosts)
+    - [1.3.8. Distribute SSH Key](#138-distribute-ssh-key)
+    - [1.3.9. Copy Sudoers Files](#139-copy-sudoers-files)
+    - [1.3.10. **In case we have a Vagrant environment deployment**](#1310-in-case-we-have-a-vagrant-environment-deployment)
+    - [1.3.11. Vagrant SSH Keys](#1311-vagrant-ssh-keys)
+    - [1.3.12. Help on Modules](#1312-help-on-modules)
+  - [1.4. Creating Users](#14-creating-users)
+  - [1.5. Managing SSH Keys using Ansible](#15-managing-ssh-keys-using-ansible)
+  - [1.6. Create the user file for be added to sudoers.d folder in our managed hosts](#16-create-the-user-file-for-be-added-to-sudoersd-folder-in-our-managed-hosts)
+    - [1.6.1. You can verify the syntax with :](#161-you-can-verify-the-syntax-with-)
+    - [1.6.2. Now, transfer this file to your managed nodes ###](#162-now-transfer-this-file-to-your-managed-nodes-)
+    - [1.6.3. Creating User Account](#163-creating-user-account)
+    - [1.6.4. Listing Ansible Documentation Modules](#164-listing-ansible-documentation-modules)
+    - [1.6.5. Playbooks](#165-playbooks)
+    - [1.6.6. Comapring Tab to Spaces](#166-comapring-tab-to-spaces)
+    - [1.6.7. Sample of vimrc file](#167-sample-of-vimrc-file)
+    - [1.6.8. Sample how to format .nanorc file](#168-sample-how-to-format-nanorc-file)
+    - [1.6.9. Sample of PLaybook](#169-sample-of-playbook)
+    - [1.6.10. Using variables in Playbooks](#1610-using-variables-in-playbooks)
+  - [1.7. Playbook Summary](#17-playbook-summary)
+    - [1.7.1. Understanding why use/not use "gather facts"](#171-understanding-why-usenot-use-gather-facts)
+  - [1.8. Creating Users](#18-creating-users)
+    - [1.8.1. Simplest User Creation](#181-simplest-user-creation)
+    - [1.8.2. Simplest User Deletion](#182-simplest-user-deletion)
+    - [1.8.3. Create Multiple Users](#183-create-multiple-users)
+    - [1.8.4. Create User (Example) [create_user_jodi.yml]](#184-create-user-example-create_user_jodiyml)
+    - [1.8.5. Delete User (Example) [delete_user_jodi.yml]](#185-delete-user-example-delete_user_jodiyml)
+    - [1.8.6. Create Multiple User (Example) [create_multiple_user.yml]](#186-create-multiple-user-example-create_multiple_useryml)
+    - [1.8.7. Delete Multiple User (Example) [delete_multiple_user.yml]](#187-delete-multiple-user-example-delete_multiple_useryml)
+    - [1.8.8. Create User Using Variable Substitution (Example) [create_user_variable_substitution.yml]](#188-create-user-using-variable-substitution-example-create_user_variable_substitutionyml)
+  - [1.9. User Passwords](#19-user-passwords)
+    - [1.9.1. Example of script in Python3](#191-example-of-script-in-python3)
+  - [1.10. Create Ansible User](#110-create-ansible-user)
+    - [1.10.1. Create identical remote users for ansible](#1101-create-identical-remote-users-for-ansible)
+    - [1.10.2. Task to add _sudo_ access](#1102-task-to-add-sudo-access)
+    - [1.10.3. Adding your local SSH Key](#1103-adding-your-local-ssh-key)
+    - [1.10.4. Creating the devops account](#1104-creating-the-devops-account)
+    - [1.10.5. Ad-hoc command to create user account in every inventory hosts](#1105-ad-hoc-command-to-create-user-account-in-every-inventory-hosts)
+    - [1.10.6. Allowing Passwordless Sudo Access for `ansible` user](#1106-allowing-passwordless-sudo-access-for-ansible-user)
+    - [1.10.7. SSH Key authentication](#1107-ssh-key-authentication)
+  - [1.11. Install Multiple Package with Playbook](#111-install-multiple-package-with-playbook)
+  - [1.12. Working with Variables and Facts](#112-working-with-variables-and-facts)
+    - [1.12.1. Using Multiple Plays](#1121-using-multiple-plays)
+    - [1.12.2. Using Facts](#1122-using-facts)
+    - [1.12.3. Consider Inventory Variables](#1123-consider-inventory-variables)
+    - [1.12.4. Playbook using variables "Admin Groups"](#1124-playbook-using-variables-admin-groups)
+    - [1.12.5. Playbook Using Variables "Package MOdule"](#1125-playbook-using-variables-package-module)
+  - [1.13. Lab Time!](#113-lab-time)
+    - [1.13.1. Installing Apache (Multiple Plays)](#1131-installing-apache-multiple-plays)
+    - [1.13.2. Installing Apache ( Logic )](#1132-installing-apache--logic-)
+    - [1.13.3. Installing Apache ( Variables)](#1133-installing-apache--variables)
+
+## 1.1. Menu
+
+### 1.1.1. Ansible-Installation ###
+
 Centos:
 
 `sudo yum install  epel-release`
@@ -104,7 +178,7 @@ Now, feel free to install Ansible being sure that will obtain from RHEL reposito
 
 `$ sudo yum install ansible -y`
 
-### Configuration Hierarchy ###
+### 1.1.2. Configuration Hierarchy ###
 Environmental Variable: `ANSIBLE_CONFIG`
 
 ansible.cfg  in Working Directory
@@ -117,7 +191,7 @@ ansible.cfg  in Working Directory
 
 `echo > ~/.ansible.cfg`
 
-### **Securing ANSIBLE_CONFIG Variable** ###
+### 1.1.3. **Securing ANSIBLE_CONFIG Variable** ###
 
 You can make this a Read-Only variable by performing within .bashrc file
 
@@ -125,17 +199,17 @@ You can make this a Read-Only variable by performing within .bashrc file
 
 In that way, any bad actor who tries to modify variable won`t be able to. 
 
-### Show current file contents ###
+### 1.1.4. Show current file contents ###
 
 `$ ansible-config view`
 
-### Show all configuration ###
+### 1.1.5. Show all configuration ###
 `$ ansible-config list`
 
-### Show current settings ###
+### 1.1.6. Show current settings ###
 `$ ansible-config dump`
 
-### Show only non-default settings ###
+### 1.1.7. Show only non-default settings ###
 It shows what was has changed from reference main config file
 
 `$ ansible-config dump --only-changed`
@@ -147,7 +221,7 @@ DEFAULT_HOST_LIST(/home/vagrant/.ansible.cfg) = ['/home/vagrant/inventory']
 DEFAULT_REMOTE_USER(/home/vagrant/.ansible.cfg) = tux
 
 ```
-## Sample of configuration file ##
+## 1.2. Sample of configuration file ##
 ```
 [defaults]
 inventory=inventory ; set inventory file in the same working directory
@@ -160,11 +234,11 @@ become_method = sudo
 
 ```
 
-## Ansible Inventory ##
+## 1.3. Ansible Inventory ##
 This is a list of hosts,groups and variables that normally or
 by default is in `/etc/ansible/hosts`.
 
-### Example of an inventory file ###
+### 1.3.1. Example of an inventory file ###
 ```
 
 [webservers]
@@ -181,7 +255,7 @@ centos
 ubuntu
 ```
 
-### Perform a quickly search and creae an Inventory ###
+### 1.3.2. Perform a quickly search and creae an Inventory ###
 
 In this case we can use Nmap package in order to perform a deep and quick search of hosts within the network
 
@@ -243,7 +317,7 @@ We will use some _awk_ params for customizing our results
 
 ` sudo nmap -Pn -p22 -n 192.168.56.0/24 --open -oG - | awk '/22\/open/ { print $2 }' `
 
-### Query Inventory ###
+### 1.3.3. Query Inventory ###
 This is the way how you make request to query
 for listing hosts in your inventory file
 
@@ -254,7 +328,7 @@ file configured and if you have another inventory file Ex: "inventory_new", you 
 
 `$ ansible  --list-hosts webservers`
 
-### Separate Hosts and Variables ###
+### 1.3.4. Separate Hosts and Variables ###
 Is a better practice to separate hosts and groups in differnet
 folders for example "`host_vars`, `group_vars`" groups.
 
@@ -262,7 +336,7 @@ folders for example "`host_vars`, `group_vars`" groups.
 
 `$ echo "ansible_connection: local" > host_vars/192.168.56.2`
 
-### Ad-hoc commands ###
+### 1.3.5. Ad-hoc commands ###
 
 Are performed from the command line , ansible must target nodes and reference a python module.
 
@@ -304,7 +378,7 @@ Some definitions of arguments:
 
 `-b` -> to elevate privileges
 
-### Basic Configuration ###
+### 1.3.6. Basic Configuration ###
 From inventory hosts we will perform a simple script for
 scan the publick ssh key cached  and add it to known_hosts file and
 be accepted when we try to establish a secure communication
@@ -313,14 +387,14 @@ be accepted when we try to establish a secure communication
 
 `$ ssh-keygen` (for generation)
 
-### Ping Hosts ###
+### 1.3.7. Ping Hosts ###
 This is not related to ICMP protocol, it is called like that but really
 this is a module that look for a python interpreter active in the remote hosts
 (`-k` , to prompt ssh password; `-K` to prompt for SUDO password)
 
 `$ ansible all -k -K -m ping` 
 
-###  Distribute SSH Key ###
+###  1.3.8. Distribute SSH Key ###
 Distribution of the ssh key in all nodes where is created the same user tux
 , add the ssh key in authorized_keys file
  
@@ -331,7 +405,7 @@ key='{{ lookup('file','/home/tux/.ssh/id_rsa.pub') }}'  "
 
 ```
 
-### Copy Sudoers Files ###
+### 1.3.9. Copy Sudoers Files ###
 To allow passwordless for not being asked everytime for sudo rights
 
 `$ echo "tux ALL=(root) NOPASSWD:ALL" > tux`
@@ -347,7 +421,7 @@ prvileges using `-K`, using copy module `-m` and specify the `-a` argument "..."
 
 - In vagrant scenario:
 
-### **In case we have a Vagrant environment deployment** ###
+### 1.3.10. **In case we have a Vagrant environment deployment** ###
 
 - We must copy vagrant keys to our controller node
 - Connect to nodes in order to test and collect node public keys
@@ -355,7 +429,7 @@ prvileges using `-K`, using copy module `-m` and specify the `-a` argument "..."
 - Key generation for vagrant in order to log in as "known" on remote nodes and distribution of this key to nodes.
 - Adjust config for using private key.
   
-### Vagrant SSH Keys ###
+### 1.3.11. Vagrant SSH Keys ###
 
 By default, ssh password authentication is disabled. Each time the system boots new keys are generated. Suppose that our scenario has 02 client nodes,  will be setup for those nodes so they could copy and update its keys into the controller.
 
@@ -554,7 +628,7 @@ The controller will create a 'tux' user, append it to the sudoers file locally a
 In the command above, the controller use the _tux_ file which contains the info which grants tux user passwordless privileges `("tux ALL=(root) NOPASSWD:ALL")`.
 
 
-### Help on Modules ###
+### 1.3.12. Help on Modules ###
 
 List module with `ansible-doc -l` command.
 
@@ -564,7 +638,7 @@ List module with `ansible-doc -l` command.
 
 `$ ansible-doc user`
 
-## Creating Users ##
+## 1.4. Creating Users ##
 
 With user module ,is nedded to specify at least 01 user name as argument.
 Must be run as root including the `-b` option (to become user = root)
@@ -579,7 +653,7 @@ To delete a user:
 `$ ansible 192.168.56.2 -b -m user -a "name=fred state=absent remove=true"`
 
 
-## Managing SSH Keys using Ansible ##
+## 1.5. Managing SSH Keys using Ansible ##
 You must run the following code to add the public keys
 of your remote hosts to your `known_hosts` file
 
@@ -603,15 +677,15 @@ to distribute your ssh key to the `authorized_key` file.
 
 `$ ansible all -k -K -m authorized_key -a " user='tux' state='present' key='{{ lookup('file','/home/tux/.ssh/id_rsa_ansible.pub')  }}'   "`
 
-## Create the user file for be added to sudoers.d folder in our managed hosts ##
+## 1.6. Create the user file for be added to sudoers.d folder in our managed hosts ##
 
 `$ echo " tux ALL=(root) NOPASSWD: ALL  > tux"`
 
-### You can verify the syntax with : ###
+### 1.6.1. You can verify the syntax with : ###
 
 `sudo visudo -cf tux`
 
-### Now, transfer this file to your managed nodes ### 
+### 1.6.2. Now, transfer this file to your managed nodes ### 
 
 `$ ansible all -b -K -m copy -a " src='tux' dest='/etc/sudoers.d/tux'  "`
 
@@ -628,7 +702,7 @@ Finally `-a` is used for specify the other attributes enclosed by `""`.
 If you try to run the previous command without -K ( sudo privilege ), will work too because we have already create the tux user file in sudoers.d directory
 
 
-### Creating User Account ###
+### 1.6.3. Creating User Account ###
 
 First, will be created a user account in ad-hoc style
 
@@ -679,26 +753,26 @@ First, will be created a user account in ad-hoc style
 
 ```
 
-### Listing Ansible Documentation Modules  ###
+### 1.6.4. Listing Ansible Documentation Modules  ###
 
 `$ ansible-doc -l`
 
 `$ ansible-doc user` -> For viewing about user module documentation
 I you want to view 'Examples', just type `\EXAMPLE`, and inside the response it will redirect the Example section. 
 
-### Playbooks ###
+### 1.6.5. Playbooks ###
 
  - Single tab != single white-space
  - You can make vim as a valid yaml editor (~/.vimrc)
  
-### Comapring Tab to Spaces ###
+### 1.6.6. Comapring Tab to Spaces ###
 
 - 8 spaces = 1 tab (With standard tab setting)
 - `:set list` , helps to view that 
     - 8 spaces in vim
     - `^I` 1 tab in vim with standard tab setting
 
-### Sample of vimrc file ###
+### 1.6.7. Sample of vimrc file ###
 
 - For yaml file we set 
   * Auto indent
@@ -717,7 +791,7 @@ I you want to view 'Examples', just type `\EXAMPLE`, and inside the response it 
       autocmd Filetype yaml setlocal ai et ts=2 sw=2 cuc cul
     
     ```
-### Sample how to format .nanorc file ###
+### 1.6.8. Sample how to format .nanorc file ###
 
 - Open any editor you prefer and create in `$HOME/.nanorc` file.
 - This file must content:
@@ -729,7 +803,7 @@ set tabstospaces
 
 ```
 
-### Sample of PLaybook ####
+### 1.6.9. Sample of PLaybook ####
 
 - Contains a list of plays 
 - A play contians -> list of tasks
@@ -751,7 +825,7 @@ O playbook must be located in the same folder of inventory.
 - Optionally you can check the syntax by doing : ` $ ansible-playbook sample.yml --syntax-check `
 - Just execute: ` $ ansible-playbook sample.yml`
 
-### Using variables in Playbooks ###
+### 1.6.10. Using variables in Playbooks ###
 
 ```
 ---
@@ -765,7 +839,7 @@ O playbook must be located in the same folder of inventory.
 
 ```
 
-## Playbook Summary ##
+## 1.7. Playbook Summary ##
 
 - Edit the vimrc file
 
@@ -783,7 +857,7 @@ O playbook must be located in the same folder of inventory.
 
         `gather_facts: false`
 
-### Understanding why use/not use "gather facts" ###
+### 1.7.1. Understanding why use/not use "gather facts" ###
 
 Gather facts option is useful when you need to acquire information from the host. But maybe, sometimes is not necessary for a particular play, in that way is better not use in order to accomplish the task faster.
 
@@ -843,11 +917,11 @@ Example: Using ad-hoc command and _setup_ module and attribute _filter_ for filt
 
 ```
 
-## Creating Users ##
+## 1.8. Creating Users ##
 
 - Look necessary documentation by doing `$ ansible-doc user`
   
-### Simplest User Creation ###
+### 1.8.1. Simplest User Creation ###
 
 ```
 ---
@@ -863,7 +937,7 @@ Example: Using ad-hoc command and _setup_ module and attribute _filter_ for filt
 
 ```
 
-### Simplest User Deletion ###
+### 1.8.2. Simplest User Deletion ###
 
 ```
 ---
@@ -881,7 +955,7 @@ Example: Using ad-hoc command and _setup_ module and attribute _filter_ for filt
 
 ```
 
-### Create Multiple Users ###
+### 1.8.3. Create Multiple Users ###
 
 ```
 ---
@@ -917,7 +991,7 @@ To create by using ad-hoc commands:
 
 `$ ansible-playbook -e user_name=suki user.yml`
  
-### Create User (Example) [create_user_jodi.yml] ###
+### 1.8.4. Create User (Example) [create_user_jodi.yml] ###
 
 ```
 ---
@@ -958,7 +1032,7 @@ jodi:x:1002:1002::/home/jodi:/bin/bash
 
 ```
 
-### Delete User (Example) [delete_user_jodi.yml] ###
+### 1.8.5. Delete User (Example) [delete_user_jodi.yml] ###
 
 ```
 ---
@@ -975,7 +1049,7 @@ jodi:x:1002:1002::/home/jodi:/bin/bash
 
 ```
 
-### Create Multiple User (Example) [create_multiple_user.yml] ###
+### 1.8.6. Create Multiple User (Example) [create_multiple_user.yml] ###
 
 ```
 ---
@@ -994,7 +1068,7 @@ jodi:x:1002:1002::/home/jodi:/bin/bash
         
 ```
 
-### Delete Multiple User (Example) [delete_multiple_user.yml] ###
+### 1.8.7. Delete Multiple User (Example) [delete_multiple_user.yml] ###
 
 ```
 ---
@@ -1015,7 +1089,7 @@ jodi:x:1002:1002::/home/jodi:/bin/bash
         
 ```
 
-### Create User Using Variable Substitution (Example) [create_user_variable_substitution.yml] ###
+### 1.8.8. Create User Using Variable Substitution (Example) [create_user_variable_substitution.yml] ###
 
 ```
 ---
@@ -1034,10 +1108,10 @@ jodi:x:1002:1002::/home/jodi:/bin/bash
 
 `$ ansible-playbook -e "user_name=jaiminho"  create_user_variable_substitution.yml `
 
-## User Passwords ##
+## 1.9. User Passwords ##
 Paswords must be encrypted, this can be done using ansible functions or using python script.
 
-### Example of script in Python3 ###
+### 1.9.1. Example of script in Python3 ###
 
 ```
 #!/usr/bin/python3
@@ -1072,9 +1146,9 @@ The example above, will be used after. Now will be explained in case we use a na
 
 ```
 
-## Create Ansible User ##
+## 1.10. Create Ansible User ##
 
-### Create identical remote users for ansible ###
+### 1.10.1. Create identical remote users for ansible ###
 
 Until now, we have been created _standard user accounts_ using Ansible.
 This account will need the following items:
@@ -1083,7 +1157,7 @@ This account will need the following items:
 - Passwordless _sudo_ access.
 - ssh key based	authentication from our	controller account.
 
-### Task to add _sudo_ access ###
+### 1.10.2. Task to add _sudo_ access ###
 
 At creating the user named as "devops" we can add paswordless access for the user.
 
@@ -1100,7 +1174,7 @@ From the code above, we have used the _copy_ module, and was specified the desti
 the _sudoers.d_ folder, in that way it grants passwordless for any future command that it needs sudo access. The `devops` file must contains the indicated _content_. Finally, the content is verfied with the command `visudo -cf <file>` that is represented by %s.
 
 
-### Adding your local SSH Key ###
+### 1.10.3. Adding your local SSH Key ###
 
 Until now we have bee using the _tux_ user account for modify and create things.
 We will use that user for copy its SSH public key to the remote _devops_ account.
@@ -1115,7 +1189,7 @@ We will use that user for copy its SSH public key to the remote _devops_ account
 
 ```
 
-### Creating the devops account ###
+### 1.10.4. Creating the devops account ###
 
 Generate inside the `/users` folder  a _.vim_ file named _devops_.
 
@@ -1145,7 +1219,7 @@ Generate inside the `/users` folder  a _.vim_ file named _devops_.
 
 ```
 
-### Ad-hoc command to create user account in every inventory hosts ###
+### 1.10.5. Ad-hoc command to create user account in every inventory hosts ###
 
 Will be createddd the `ansible` user in every host that belongs to the inventory file.
 
@@ -1217,7 +1291,7 @@ ansible:x:1005:1005::/home/ansible:/bin/bash
 ansible:$6$aqBxnzLdlawurBaM$IXSz4f5tc3QF08C6i98IVHpZpcl5fvQkSYOCZVaqDbKkXGqS2QlmTH502vnZKHJvWXNEiMPozLv2JTWD1AoKf1:18854:0:99999:7:::
 
 ```
-### Allowing Passwordless Sudo Access for `ansible` user ###
+### 1.10.6. Allowing Passwordless Sudo Access for `ansible` user ###
 - Create one file that contains the following fields
 
 `echo "ansible ALL=(root) NOPASSWD: ALL" > ansible`
@@ -1228,7 +1302,7 @@ ansible:$6$aqBxnzLdlawurBaM$IXSz4f5tc3QF08C6i98IVHpZpcl5fvQkSYOCZVaqDbKkXGqS2Qlm
 
  `$ ansible all -bkK -m copy -a "src=ansible dest=/etc/sudoers.d/ansible" `
 
-### SSH Key authentication ###
+### 1.10.7. SSH Key authentication ###
 
 - Here, will be trasnferred our public key that is located in `home/<other_user>/.ssh` to  ansible user folder at our destination controlled clients
 
@@ -1237,7 +1311,7 @@ ansible:$6$aqBxnzLdlawurBaM$IXSz4f5tc3QF08C6i98IVHpZpcl5fvQkSYOCZVaqDbKkXGqS2Qlm
 
 
 
-## Install Multiple Package with Playbook  ##
+## 1.11. Install Multiple Package with Playbook  ##
 A briefly playbook [install-multi-pkgs.yml] for you understand how to install package in your inventory hosts.
 
 ```
@@ -1298,7 +1372,7 @@ PLAY RECAP *********************************************************************
 192.168.56.4               : ok=3    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
 
 ```
-## Working with Variables and Facts ##
+## 1.12. Working with Variables and Facts ##
 
 For example CentOS and Ubuntu use different package management, `yum` for CentOS and `apt` for Ubuntu.
 The process of intallation of different packages can be optimized by using conditional and variables to detect which distribution is being used.
@@ -1315,7 +1389,7 @@ The default admin groups are:
 
 The use of variables can be performed in host groups to represent group names as an example.
 
-### Using Multiple Plays ###
+### 1.12.1. Using Multiple Plays ###
 
 If we use _host groups_ to deploy a play, for example 02 groups called
 _Ubuntu_ and _CentOS_ we can use 02 plays.
@@ -1331,7 +1405,7 @@ _Ubuntu_ and _CentOS_ we can use 02 plays.
 
 ``` 
 
-### Using Facts ###
+### 1.12.2. Using Facts ###
 
 It is useful when an specific task must be targeted to an specific distribution. The clause `when` should be used, as similar as
 a conditional statement. In that way, you can use just only one play with multiple tasks.
@@ -1367,7 +1441,7 @@ Another example:
 
 ```
 
-### Consider Inventory Variables ###
+### 1.12.3. Consider Inventory Variables ###
 
 It is recommended create those variables in our folder `group_vars` previously created.
 
@@ -1380,7 +1454,7 @@ $ echo "web_package: apache2" >> group_vars/ubuntu
 
 ```
 
-### Playbook using variables "Admin Groups" ###
+### 1.12.4. Playbook using variables "Admin Groups" ###
 
 Using variables can be a good idea to caster for differences
 
@@ -1399,7 +1473,7 @@ Using variables can be a good idea to caster for differences
 
 ```
 
-### Playbook Using Variables "Package MOdule" ###
+### 1.12.5. Playbook Using Variables "Package MOdule" ###
 
 The package module is nice because it allows the correct _apt_ or  _yum_ package management
 be detected. WIth the correct variable set in `group_vars/` this works good.
@@ -1418,7 +1492,7 @@ be detected. WIth the correct variable set in `group_vars/` this works good.
        state: latest
 ```
 
-## Lab Time! ##
+## 1.13. Lab Time! ##
 
 Will be create a new directory `lamp` inside `/home/tux/ansible/users/` path. And will be copied the follwing files from the parent folder.
 
@@ -1461,7 +1535,7 @@ We create a simple .yml file (user.yml):
 Executing the file `$ ansible-playbook user.yml` will assign the `devops` account to the group `sudo`, using the alias
 or variable created in _*group_vars/ubuntu*_ .
  
-### Installing Apache (Multiple Plays) ###
+### 1.13.1. Installing Apache (Multiple Plays) ###
 
 Create the file `apache-multi-play.yml`:
 
@@ -1492,7 +1566,7 @@ change the server of update to the 'main server'. You can make it using the GUI 
 sed -r -i "s/[a-zA-Z]{1,3}\.archive/archive/g" /etc/apt/sources.list
 
 ```
-### Installing Apache ( Logic ) ###
+### 1.13.2. Installing Apache ( Logic ) ###
 
 Create the file `apache-using-logic.yml`:
 
@@ -1517,7 +1591,7 @@ Create the file `apache-using-logic.yml`:
 
 To execute, `$ ansible-playbook apache-using-logic.yml` .
 
-### Installing Apache ( Variables) ###
+### 1.13.3. Installing Apache ( Variables) ###
 
 Create the file `apache-using-variables.yml`:
 
