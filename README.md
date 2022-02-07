@@ -621,9 +621,9 @@ Last login: Sun Dec 19 14:37:43 2021 from 192.168.56.11
 
 ```
 
-The controller will create a 'tux' user, append it to the sudoers file locally and remotely in their client nodes. Remember that the controller must use node ssh-key file for authenticate and proceed with the operation. Those .key are files that will be generated with scp utility in a vagrant environment
+The controller will create a 'tux' user, append it to the sudoers file locally and remotely in their client nodes. Remember that the controller must use node ssh-key file for authenticate and proceed with the operation. Those .key are files that will be transferred with scp utility in a vagrant environment
 
-`user@host $ ansible --private-key ubuntu.key -u vagrant -m copy -a "src=tux dest=/etc/sudoers.d/"`
+`user@host $ ansible --private-key ubuntu.key ubuntu -u vagrant -m copy -a "src=tux dest=/etc/sudoers.d/"`
 
 In the command above, the controller use the _tux_ file which contains the info which grants tux user passwordless privileges `("tux ALL=(root) NOPASSWD:ALL")`.
 
