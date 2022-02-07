@@ -93,69 +93,73 @@ Debian:
 
 `sudo apt install -y ansible sshpass`
 
-  - Ubuntu (20.04)
-    - `$ sudo apt-add-repository  --yes --update ppa:ansible/ansible`
-    
-    - `$ sudo apt install ansible`
+- Ubuntu (20.04)
+
+ `$ sudo apt-add-repository  --yes --update ppa:ansible/ansible`
+
+ `$ sudo apt install ansible`
 
 RHEL:
 
 Enabling Ansible on RHEL 8
 
-- _*Remember* register before your RHEL machine:_
-  - ```  
-     [vagrant@rhel8 ~]$ sudo subscription-manager register \
-      > --username user --password pass --auto-attach
-      Registering to: subscription.rhsm.redhat.com:443/subscription
-      The system has been registered with ID: xxxxxx-xxxxxx-xxxxx-xxxxxx
-      The registered system name is: rhel8
-      Installed Product Current Status:
-      Product Name: Red Hat Enterprise Linux for x86_64
-      Status:       Subscribed
+*Remember* register before your RHEL machine:
+
+```
+
+[vagrant@rhel8 ~]$ sudo subscription-manager register \
+> --username user --password pass --auto-attach
+Registering to: subscription.rhsm.redhat.com:443/subscription
+The system has been registered with ID: xxxxxx-xxxxxx-xxxxx-xxxxxx
+The registered system name is: rhel8
+Installed Product Current Status:
+Product Name: Red Hat Enterprise Linux for x86_64
+Status:       Subscribed
 
 
-      WARNING
+WARNING
 
-      The yum/dnf plugins: /etc/dnf/plugins/subscription-manager.conf were automatically enabled for the benefit of Red Hat Subscription Management. If not desired, use "subscription-manager config --rhsm.auto_enable_yum_plugins=0" to block this behavior.
+The yum/dnf plugins: /etc/dnf/plugins/subscription-manager.conf were automatically enabled for the benefit of Red Hat Subscription Management. If not desired, use "subscription-manager config --rhsm.auto_enable_yum_plugins=0" to block this behavior.
 
-  
+```  
 
 Next, lookup for an Ansible version
 
 ```
-  [vagrant@rhel8 ~]$ sudo subscription-manager repos --list | grep ansible | nl
-     1	Repo ID:   ansible-2-for-rhel-8-x86_64-source-rpms
-     2	Repo URL:  https://cdn.redhat.com/content/dist/layered/rhel8/x86_64/ansible/2/source/SRPMS
-     3	Repo ID:   ansible-2.8-for-rhel-8-x86_64-source-rpms
-     4	Repo URL:  https://cdn.redhat.com/content/dist/layered/rhel8/x86_64/ansible/2.8/source/SRPMS
-     5	Repo ID:   ansible-2.9-for-rhel-8-x86_64-rpms
-     6	Repo URL:  https://cdn.redhat.com/content/dist/layered/rhel8/x86_64/ansible/2.9/os
-     7	Repo ID:   ansible-automation-platform-2.1-for-rhel-8-x86_64-rpms
-     8	Repo URL:  https://cdn.redhat.com/content/dist/layered/rhel8/x86_64/ansible-automation-platform/2.1/os
-     9	Repo ID:   ansible-2.9-for-rhel-8-x86_64-debug-rpms
-    10	Repo URL:  https://cdn.redhat.com/content/dist/layered/rhel8/x86_64/ansible/2.9/debug
-    11	Repo ID:   ansible-automation-platform-2.0-early-access-for-rhel-8-x86_64-rpms
-    12	Repo URL:  https://cdn.redhat.com/content/dist/layered/rhel8/x86_64/ansible-automation-platform/2.0/os
-    13	Repo ID:   ansible-2-for-rhel-8-x86_64-rpms
-    14	Repo URL:  https://cdn.redhat.com/content/dist/layered/rhel8/x86_64/ansible/2/os
-    15	Repo ID:   ansible-automation-platform-2.1-for-rhel-8-x86_64-debug-rpms
-    16	Repo URL:  https://cdn.redhat.com/content/dist/layered/rhel8/x86_64/ansible-automation-platform/2.1/debug
-    17	Repo ID:   ansible-automation-platform-2.1-for-rhel-8-x86_64-source-rpms
-    18	Repo URL:  https://cdn.redhat.com/content/dist/layered/rhel8/x86_64/ansible-automation-platform/2.1/source/SRPMS
-    19	Repo ID:   ansible-automation-platform-2.0-early-access-for-rhel-8-x86_64-source-rpms
-    20	Repo URL:  https://cdn.redhat.com/content/dist/layered/rhel8/x86_64/ansible-automation-platform/2.0/source/SRPMS
-    21	Repo ID:   ansible-2.8-for-rhel-8-x86_64-debug-rpms
-    22	Repo URL:  https://cdn.redhat.com/content/dist/layered/rhel8/x86_64/ansible/2.8/debug
-    23	Repo ID:   ansible-2.8-for-rhel-8-x86_64-rpms
-    24	Repo URL:  https://cdn.redhat.com/content/dist/layered/rhel8/x86_64/ansible/2.8/os
-    25	Repo ID:   ansible-2.9-for-rhel-8-x86_64-source-rpms
-    26	Repo URL:  https://cdn.redhat.com/content/dist/layered/rhel8/x86_64/ansible/2.9/source/SRPMS
-    27	Repo ID:   ansible-automation-platform-2.0-early-access-for-rhel-8-x86_64-debug-rpms
-    28	Repo URL:  https://cdn.redhat.com/content/dist/layered/rhel8/x86_64/ansible-automation-platform/2.0/debug
-    29	Repo ID:   ansible-2-for-rhel-8-x86_64-debug-rpms
-    30	Repo URL:  https://cdn.redhat.com/content/dist/layered/rhel8/x86_64/ansible/2/debug
+[vagrant@rhel8 ~]$ sudo subscription-manager repos --list | grep ansible | nl
+1	Repo ID:   ansible-2-for-rhel-8-x86_64-source-rpms
+2	Repo URL:  https://cdn.redhat.com/content/dist/layered/rhel8/x86_64/ansible/2/source/SRPMS
+3	Repo ID:   ansible-2.8-for-rhel-8-x86_64-source-rpms
+4	Repo URL:  https://cdn.redhat.com/content/dist/layered/rhel8/x86_64/ansible/2.8/source/SRPMS
+5	Repo ID:   ansible-2.9-for-rhel-8-x86_64-rpms
+6	Repo URL:  https://cdn.redhat.com/content/dist/layered/rhel8/x86_64/ansible/2.9/os
+7	Repo ID:   ansible-automation-platform-2.1-for-rhel-8-x86_64-rpms
+8	Repo URL:  https://cdn.redhat.com/content/dist/layered/rhel8/x86_64/ansible-automation-platform/2.1/os
+9	Repo ID:   ansible-2.9-for-rhel-8-x86_64-debug-rpms
+10	Repo URL:  https://cdn.redhat.com/content/dist/layered/rhel8/x86_64/ansible/2.9/debug
+11	Repo ID:   ansible-automation-platform-2.0-early-access-for-rhel-8-x86_64-rpms
+12	Repo URL:  https://cdn.redhat.com/content/dist/layered/rhel8/x86_64/ansible-automation-platform/2.0/os
+13	Repo ID:   ansible-2-for-rhel-8-x86_64-rpms
+14	Repo URL:  https://cdn.redhat.com/content/dist/layered/rhel8/x86_64/ansible/2/os
+15	Repo ID:   ansible-automation-platform-2.1-for-rhel-8-x86_64-debug-rpms
+16	Repo URL:  https://cdn.redhat.com/content/dist/layered/rhel8/x86_64/ansible-automation-platform/2.1/debug
+17	Repo ID:   ansible-automation-platform-2.1-for-rhel-8-x86_64-source-rpms
+18	Repo URL:  https://cdn.redhat.com/content/dist/layered/rhel8/x86_64/ansible-automation-platform/2.1/source/SRPMS
+19	Repo ID:   ansible-automation-platform-2.0-early-access-for-rhel-8-x86_64-source-rpms
+20	Repo URL:  https://cdn.redhat.com/content/dist/layered/rhel8/x86_64/ansible-automation-platform/2.0/source/SRPMS
+21	Repo ID:   ansible-2.8-for-rhel-8-x86_64-debug-rpms
+22	Repo URL:  https://cdn.redhat.com/content/dist/layered/rhel8/x86_64/ansible/2.8/debug
+23	Repo ID:   ansible-2.8-for-rhel-8-x86_64-rpms
+24	Repo URL:  https://cdn.redhat.com/content/dist/layered/rhel8/x86_64/ansible/2.8/os
+25	Repo ID:   ansible-2.9-for-rhel-8-x86_64-source-rpms
+26	Repo URL:  https://cdn.redhat.com/content/dist/layered/rhel8/x86_64/ansible/2.9/source/SRPMS
+27	Repo ID:   ansible-automation-platform-2.0-early-access-for-rhel-8-x86_64-debug-rpms
+28	Repo URL:  https://cdn.redhat.com/content/dist/layered/rhel8/x86_64/ansible-automation-platform/2.0/debug
+29	Repo ID:   ansible-2-for-rhel-8-x86_64-debug-rpms
+30	Repo URL:  https://cdn.redhat.com/content/dist/layered/rhel8/x86_64/ansible/2/debug
 
 ```
+
 From results above, we will use the (5) option
 
 `$ sudo subscription-manager --enable ansible-2.9-for-rhel-8-x86_64-rpms`
