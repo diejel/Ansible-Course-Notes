@@ -425,6 +425,15 @@ key='{{ lookup('file','/home/tux/.ssh/id_rsa.pub') }}'  "
 
 ```
 
+For Vagrant Scenario:
+
+```
+$ ansible stream --private-key stream.key -u vagrant -m authorized_key -a "user=tux state=present key='{{ lookup('file','/home/vagrant/.ssh/id_rsa.pub')   }}'"
+```
+
+The command above uses stream private key to connect to stream node, inside stream node is registered the vagrant user which is the native built-in user this node has, authorized_key module is used for place the public key file of vagrant user _(was generated being logged as vagrant user and run `ssh-keygen`)_ to the "tux" authorized_keys at home's tux folder, the unique requisite is that tux user must already exists. 
+
+
 ### 1.3.9. Copy Sudoers Files
 
 To allow passwordless for not being asked everytime for sudo rights
@@ -436,7 +445,7 @@ To verify if syntax is correct, do:
 `$ sudo visudo -cf tux`
 
 Copy process for all inventory hosts using `-b` to become sudo and elevate
-prvileges using `-K`, using copy module `-m` and specify the `-a` argument "..."...
+prvileges using `-K`, using copy module `-m` and specify the `-a` argument
 
 `$ ansible all -b -K -m copy -a "src=tux dest=/etc/sudoers.d/tux"`
 
@@ -647,6 +656,7 @@ The controller will create a 'tux' user, append it to the sudoers file locally a
 
 In the command above, the controller use the _tux_ file which contains the info which grants tux user passwordless privileges `("tux ALL=(root) NOPASSWD:ALL")`.
 
+Remember that is important generate a ssh key pribate/public and share your public key to your hdstination hosts in order you can log in them.
 
 ### 1.3.12. Help on Modules
 
