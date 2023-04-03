@@ -1,0 +1,37 @@
+---
+- name: Prepare new disk for LVM
+  hosts: localhost
+  become: yes
+  
+  vars:
+    disk_name: /dev/sdc  # Replace with the name of your new disk
+    vg_name: vg02        # Replace with the name of your desired LVM volume group
+    lv_name: lv02        # Replace with the name of your desired LVM logical volume
+    lv_size: 200m         # Replace with the size you want for your LVM logical volume
+
+  tasks:
+    - name: Create partition on disk
+      parted:
+        device: "{{ disk_name }}"
+        number: 1
+        state: present
+        part_start: 1MiB
+        part_end: 100%
+        flags: [lvm]
+      register: partition_created
+
+    - name: Create physical volume for LVM
+      command: pvcreate "{{ disk_name }}1"
+      when: partition_created.changed
+
+    - name: Create volume group for LVM
+      command: vgcreate "{{ vg_name }}" "{{ disk_name }}1"
+      when: partition_created.changed
+
+    - name: Create logical volume for LVM
+      command: lvcreate --name "{{ lv_name }}" --size "{{ lv_size }}" "{{ vg_name }}"
+      when: partition_created.changed
+
+    - name: Format logical volume with ext4 filesystem
+      command: mkfs.ext4 "/dev/{{ vg_name }}/{{ lv_name }}"
+      when: partition_created.changed
