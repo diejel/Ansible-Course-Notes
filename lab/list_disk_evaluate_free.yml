@@ -1,0 +1,60 @@
+---
+- name: List Directories
+  hosts: localhost
+  gather_facts: no
+  become: true
+  vars:
+    required_space_lvm: 0.5
+    vgroup: vg02
+    lvname: lv02
+    #vgroup: "/dev/vg02"
+  tasks:
+  - name: Show the actual disks on the system and further details.
+    shell: 'echo Disk on the system are the below ones: ; lsblk -fio NAME,TYPE,SIZE,MOUNTPOINT | egrep -i "sd\w{1}" | egrep -v "part" | nl ; echo "The last added disk was:" ; lsblk -fio NAME | egrep -io "sd\w{1}" | egrep -v "part" | sort -u | tail -n 1;'
+    register: block_devs
+
+  - name: Print directory list
+    debug:
+      var: block_devs.stdout_lines | replace('\t', ') ')
+
+  - name: Will be calculated free space in target Volume group
+    shell: |
+       value=$(vgs /dev/{{vgroup}} -o vg_free --unit G | egrep -i "[0-9]{1,}\.[0-9]{1,}G" | cut -d"." -f1 | sed "s/\s//g")
+       echo "$value"
+    register: result_free_space_vg
+  
+  - name: "Check if space required is lower that space free in volume group /dev/{{vgroup}}"
+    debug:
+      msg: "The free space in volume group {{vgroup}} is ({{result_free_space_vg.stdout}}G), this value is greater than what is required -> {{ required_space_lvm }}G 
+      , so will be performed and extension of the lvm /dev/{{vgroup}}/{{lvname}}"
+    when: result_free_space_vg.stdout | int > required_space_lvm
+
+  - name: extend lvm
+    lvol:
+      vg: vg02
+      lv: lv02
+      size: 10%FREE
+      force: yes
+    when: result_free_space_vg.stdout | int > required_space_lvm
+  # - fail:
+  #     msg: "Not enough space in vg"
+  #   when: "lvg_info.vgs[0].free_size < 1024*1024*1024"
+  # - name: Check VG free space
+  #   lvg:
+  #     vg: /dev/maper/vg02 #"{{ vg_name }}"
+  #   register: lvg_info
+
+  # - debug:
+  #     var: lvg_info
+
+  # - fail:
+  #     msg: "Not enough space available in VG VG02"
+  #   when: 'lvg_info.vgs[0].free_size < 1*1024*1024*1024' # check if free space is less than 1 GB
+
+  # - name: Extend LV
+  #   lvol:
+  #     vg: vg02 #"{{ vg_name }}"
+  #     lv: lv02 #"{{ lv_name }}"
+  #     size: "+1G"
+  #     resizefs: yes
+  #   when: 'lvg_info.vgs[0].free_size >= 1*1024*1024*1024' # check if free space is at least 200 MB
